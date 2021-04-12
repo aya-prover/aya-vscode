@@ -42,6 +42,7 @@ export async function startDaemon(context: vscode.ExtensionContext, lspJar: stri
 
   progress.report({ message: "Waiting for typechecking...", increment: 1500 });
   await languageClient.onReady();
+  setupAyaSpecialFeatures(languageClient);
 }
 
 function runClient(context: vscode.ExtensionContext, outputChannel: vscode.OutputChannel, lspJar: string, host: string, port: number): ServerOptions {
@@ -98,6 +99,12 @@ function createLanguageClient(serverOptions: ServerOptions): LanguageClient {
   };
 
   return new LanguageClient("aya", "Aya language client", serverOptions, clientOptions);
+}
+
+function setupAyaSpecialFeatures(client: LanguageClient) {
+  client.onNotification("aya/publishSyntaxHighlight", (param) => {
+    // TODO[kiva]: apply hightlight form server
+  });
 }
 
 export async function findAya(context: vscode.ExtensionContext): Promise<string | null> {
