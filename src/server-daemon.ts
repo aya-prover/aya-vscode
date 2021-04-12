@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import * as child_process from "child_process";
 import { LanguageClientOptions, RevealOutputChannelOn } from "vscode-languageclient";
 import { LanguageClient, ServerOptions, StreamInfo } from "vscode-languageclient/node";
+import * as hightlight from './highlight';
 
 type Progress = vscode.Progress<{ message?: string; increment?: number }>;
 
@@ -102,8 +103,8 @@ function createLanguageClient(serverOptions: ServerOptions): LanguageClient {
 }
 
 function setupAyaSpecialFeatures(client: LanguageClient) {
-  client.onNotification("aya/publishSyntaxHighlight", (param) => {
-    // TODO[kiva]: apply hightlight form server
+  client.onNotification("aya/publishSyntaxHighlight", (param: hightlight.SyntaxHighlightParams) => {
+    hightlight.applyHighlight(param);
   });
 }
 
