@@ -21,7 +21,7 @@ export async function startDaemon(context: vscode.ExtensionContext, lspJar: stri
 
   let serverOptions: ServerOptions;
   if (mode === "server") serverOptions = runServer(context, outputChannel, lspJar, host, port);
-  else if (mode === "client-debug") serverOptions = runClientDebug(context, lspJar, host, port);
+  else if (mode === "client-debug") serverOptions = runClientDebug(host, port);
   else serverOptions = runClient(context, outputChannel, lspJar, host, port);
 
   let languageClient = createLanguageClient(serverOptions);
@@ -72,7 +72,7 @@ function runServer(context: vscode.ExtensionContext, outputChannel: vscode.Outpu
   });
 }
 
-function runClientDebug(context: vscode.ExtensionContext, lspJar: string, host: string, port: number): ServerOptions {
+function runClientDebug(host: string, port: number): ServerOptions {
   return () => connectToPort(host, port);
 }
 
