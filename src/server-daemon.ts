@@ -100,7 +100,7 @@ function createLanguageClient(serverOptions: ServerOptions): LanguageClient {
   return new LanguageClient("aya", "Aya language client", serverOptions, clientOptions);
 }
 
-export async function findArend(context: vscode.ExtensionContext): Promise<string | null> {
+export async function findAya(context: vscode.ExtensionContext): Promise<string | null> {
   const config = vscode.workspace.getConfiguration("aya");
 
   if (!config.get<boolean>("lsp.enabled")) {
