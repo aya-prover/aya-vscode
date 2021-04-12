@@ -30,17 +30,27 @@
                     "default": true,
                     "description": "[Recommended] Use Language Server to provide syntax highlighting and other interactive features"
                 },
-                "arend.lsp.host": {
+                "aya.lsp.mode": {
+                    "type": "string",
+                    "default": "client",
+                    "enum": [
+                        "client",
+                        "server",
+                        "client-debug"
+                    ],
+                    "description": "The mode to run language server: Client mode (Automatically create server and connect to it. Recommended), Server mode (listening and wait for server to connect) or Client Debug mode (just connect to an existing port)"
+                },
+                "aya.lsp.host": {
                     "type": "string",
                     "default": "localhost",
                     "description": "The host which the language server listens on."
                 },
-                "arend.lsp.port": {
+                "aya.lsp.port": {
                     "type": "number",
                     "default": 11451,
                     "description": "The port number which the language server listens on."
                 },
-                "arend.lsp.path": {
+                "aya.lsp.path": {
                     "type": "string",
                     "description": "Specifies the local path of the aya language server jar, mostly used for debugging"
                 }
@@ -71,16 +81,19 @@
         "test": "node ./out/test/runTest.js"
     },
     "devDependencies": {
-        "@types/vscode": "^1.55.0",
         "@types/glob": "^7.1.3",
         "@types/mocha": "^8.0.4",
         "@types/node": "^12.11.7",
-        "eslint": "^7.19.0",
+        "@types/vscode": "^1.55.0",
         "@typescript-eslint/eslint-plugin": "^4.14.1",
         "@typescript-eslint/parser": "^4.14.1",
+        "eslint": "^7.19.0",
         "glob": "^7.1.6",
         "mocha": "^8.2.1",
         "typescript": "^4.1.3",
         "vscode-test": "^1.5.0"
+    },
+    "dependencies": {
+        "vscode-languageclient": "^7.0.0"
     }
 }
