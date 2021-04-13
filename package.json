@@ -3,6 +3,7 @@
     "displayName": "Aya Prover",
     "description": "Aya Prover support for VSCode",
     "version": "0.0.1",
+    "publisher": "aya-prover",
     "engines": {
         "vscode": "^1.55.0"
     },
@@ -20,6 +21,19 @@
                 "command": "aya.lsp.command.restart",
                 "category": "Aya",
                 "title": "Restart Aya Language Server"
+            },
+            {
+                "command": "aya.lsp.command.load",
+                "category": "Aya",
+                "title": "Load"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "aya.lsp.command.load",
+                "key": "ctrl+c ctrl+l",
+				"mac": "ctrl+c ctrl+l",
+                "when": "editorLangId == aya"
             }
         ],
         "configuration": {

@@ -9,10 +9,13 @@ import * as hightlight from './highlight';
 
 type Progress = vscode.Progress<{ message?: string; increment?: number }>;
 
+let ayaStatusBar: vscode.StatusBarItem;
+
 export async function startDaemon(context: vscode.ExtensionContext, lspExec: string, progress: Progress) {
   progress.report({ message: "Starting Aya", increment: 500 });
   const config = vscode.workspace.getConfiguration("aya");
 
+  ayaStatusBar = vscode.window.createStatusBarItem();
   const outputChannel = vscode.window.createOutputChannel("Aya");
   context.subscriptions.push(outputChannel);
   outputChannel.appendLine(`Aya Language Server: ${lspExec}`);
@@ -44,7 +47,7 @@ export async function startDaemon(context: vscode.ExtensionContext, lspExec: str
 
   progress.report({ message: "Aya started", increment: 1500 });
   await languageClient.onReady();
-  setupAyaSpecialFeatures(languageClient);
+  setupAyaSpecialFeatures(context, languageClient);
 }
 
 function runDebug(outputChannel: vscode.OutputChannel, lspExec: string): ServerOptions {
@@ -110,10 +113,18 @@ function createLanguageClient(serverOptions: ServerOptions): LanguageClient {
   return new LanguageClient("aya", "Aya language client", serverOptions, clientOptions);
 }
 
-function setupAyaSpecialFeatures(client: LanguageClient) {
-  client.onNotification("aya/publishSyntaxHighlight", (param: hightlight.SyntaxHighlightParams) => {
-    hightlight.applyHighlight(param);
-  });
+function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client: LanguageClient) {
+  context.subscriptions.push(vscode.commands.registerCommand("aya.lsp.command.load", async () => {
+    if (!vscode.window.activeTextEditor) return;
+    let { document } = vscode.window.activeTextEditor;
+    ayaStatusBar.text = `Loading ${document.uri.path}`;
+    ayaStatusBar.show();
+
+    let uri = document.uri.toString();
+    let result = client.sendRequest<hightlight.HighlightResult>("aya/load", uri);
+    result.then(hightlight.applyHighlight).catch(console.log);
+    ayaStatusBar.hide();
+  }));
 }
 
 export async function findAya(context: vscode.ExtensionContext): Promise<string | null> {
