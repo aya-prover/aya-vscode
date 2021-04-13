@@ -60,7 +60,7 @@
             "[aya]": {
                 "editor.semanticHighlighting.enabled": true
             }
-        },       
+        },
         "languages": [
             {
                 "id": "aya",
@@ -74,6 +74,23 @@
                     ".aya"
                 ],
                 "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "aya",
+                "scopeName": "source.aya",
+                "path": "./grammars/Aya.tmLanguage"
+            },
+            {
+                "scopeName": "markdown.aya.codeblock",
+                "path": "./grammars/codeblock.json",
+                "injectTo": [
+                    "text.html.markdown"
+                ],
+                "embeddedLanguages": {
+                    "meta.embedded.block.aya": "aya"
+                }
             }
         ]
     },
