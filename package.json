@@ -32,13 +32,13 @@
                 },
                 "aya.lsp.mode": {
                     "type": "string",
-                    "default": "client",
+                    "default": "server",
                     "enum": [
-                        "client",
                         "server",
-                        "client-debug"
+                        "client",
+                        "debug"
                     ],
-                    "description": "The mode to run language server: Client mode (Automatically create server and connect to it. Recommended), Server mode (listening and wait for server to connect) or Client Debug mode (just connect to an existing port)"
+                    "description": "The mode to run language server: Server mode (listening and wait for server to connect. Recommended), Client mode (Automatically create server and connect to it) or Debug mode (do not use sockets, use stdin and stdout)"
                 },
                 "aya.lsp.host": {
                     "type": "string",

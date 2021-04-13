@@ -5,6 +5,7 @@ import * as child_process from "child_process";
 import { LanguageClientOptions, RevealOutputChannelOn } from "vscode-languageclient";
 import { LanguageClient, ServerOptions, StreamInfo } from "vscode-languageclient/node";
 import * as hightlight from './highlight';
+import { ChildProcess } from 'node:child_process';
 
 type Progress = vscode.Progress<{ message?: string; increment?: number }>;
 
@@ -22,8 +23,8 @@ export async function startDaemon(context: vscode.ExtensionContext, lspJar: stri
 
   let serverOptions: ServerOptions;
   if (mode === "server") serverOptions = runServer(context, outputChannel, lspJar, host, port);
-  else if (mode === "client-debug") serverOptions = runClientDebug(host, port);
-  else serverOptions = runClient(context, outputChannel, lspJar, host, port);
+  else if (mode === "client") serverOptions = runClient(host, port);
+  else serverOptions = runDebug(context, outputChannel, lspJar);
 
   let languageClient = createLanguageClient(serverOptions);
   let languageClientDisposable = languageClient.start();
@@ -46,13 +47,13 @@ export async function startDaemon(context: vscode.ExtensionContext, lspJar: stri
   setupAyaSpecialFeatures(languageClient);
 }
 
-function runClient(context: vscode.ExtensionContext, outputChannel: vscode.OutputChannel, lspJar: string, host: string, port: number): ServerOptions {
-  const proc = child_process.spawn("java", ["--enable-preview", "-jar", lspJar, "--mode", "server", "--host", host, "--port", port.toString()]);
-  const outputCallback = (data: any) => outputChannel.append(`${data}`);
-  proc.stdout.on("data", outputCallback);
-  proc.stderr.on("data", outputCallback);
-  proc.on("exit", (code, sig) => outputChannel.appendLine(`The language server exited with ${code} (${sig})`));
-  return () => connectToPort(host, port);
+function runDebug(context: vscode.ExtensionContext, outputChannel: vscode.OutputChannel, lspJar: string): ServerOptions {
+  return () => new Promise((resolve, reject) => {
+    const proc = spawnJava(outputChannel, lspJar, ["--mode", "debug", "--port", "0"]);
+    proc.on("exit", (code, sig) => outputChannel.appendLine(`The language server exited with ${code} (${sig})`));
+    proc.on("error", e => reject(e));
+    proc.on("spawn", () => resolve(proc));
+  });
 }
 
 function runServer(context: vscode.ExtensionContext, outputChannel: vscode.OutputChannel, lspJar: string, host: string, port: number): ServerOptions {
@@ -63,25 +64,32 @@ function runServer(context: vscode.ExtensionContext, outputChannel: vscode.Outpu
     });
     server.listen(port, host, () => {
       const tcpPort = (server.address() as net.AddressInfo).port.toString();
-      const proc = child_process.spawn("java", ["--enable-preview", "-jar", lspJar, "--mode", "client", "--port", tcpPort]);
-
-      const outputCallback = (data: any) => outputChannel.append(`${data}`);
-      proc.stdout.on("data", outputCallback);
-      proc.stderr.on("data", outputCallback);
-      proc.on("exit", (code, sig) => outputChannel.appendLine(`The language server exited with ${code} (${sig})`));
+      spawnJava(outputChannel, lspJar, ["--mode", "client", "--port", tcpPort]);
     });
     server.on("error", e => reject(e));
   });
 }
 
-function runClientDebug(host: string, port: number): ServerOptions {
+function spawnJava(outputChannel: vscode.OutputChannel, jar: string, args: string[]): ChildProcess {
+  const proc = child_process.spawn("java", ["--enable-preview", "-jar", jar].concat(args));
+
+  const outputCallback = (data: any) => outputChannel.append(`${data}`);
+  proc.stdout.on("data", outputCallback);
+  proc.stderr.on("data", outputCallback);
+
+  proc.on("exit", (code, sig) => outputChannel.appendLine(`The language server exited with ${code} (${sig})`));
+  return proc;
+}
+
+function runClient(host: string, port: number): ServerOptions {
   return () => connectToPort(host, port);
 }
 
 function connectToPort(host: string, port: number): Promise<StreamInfo> {
   return new Promise((resolve, reject) => {
     let socket = net.connect(port, host);
-    resolve({ reader: socket, writer: socket });
+    socket.on("error", e => reject(e));
+    socket.on("connect", () => resolve({ reader: socket, writer: socket }));
   });
 }
 
