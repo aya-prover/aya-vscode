@@ -22,9 +22,9 @@ export async function startDaemon(context: vscode.ExtensionContext, lspJar: stri
   let host: string = config.get<string>("lsp.host") ?? "localhost";
 
   let serverOptions: ServerOptions;
-  if (mode === "server") serverOptions = runServer(context, outputChannel, lspJar, host, port);
+  if (mode === "server") serverOptions = runServer(outputChannel, lspJar, host, port);
   else if (mode === "client") serverOptions = runClient(host, port);
-  else serverOptions = runDebug(context, outputChannel, lspJar);
+  else serverOptions = runDebug(outputChannel, lspJar);
 
   let languageClient = createLanguageClient(serverOptions);
   let languageClientDisposable = languageClient.start();
@@ -47,7 +47,7 @@ export async function startDaemon(context: vscode.ExtensionContext, lspJar: stri
   setupAyaSpecialFeatures(languageClient);
 }
 
-function runDebug(context: vscode.ExtensionContext, outputChannel: vscode.OutputChannel, lspJar: string): ServerOptions {
+function runDebug(outputChannel: vscode.OutputChannel, lspJar: string): ServerOptions {
   return () => new Promise((resolve, reject) => {
     const proc = spawnJava(outputChannel, lspJar, ["--mode", "debug", "--port", "0"]);
     proc.on("exit", (code, sig) => outputChannel.appendLine(`The language server exited with ${code} (${sig})`));
@@ -56,7 +56,7 @@ function runDebug(context: vscode.ExtensionContext, outputChannel: vscode.Output
   });
 }
 
-function runServer(context: vscode.ExtensionContext, outputChannel: vscode.OutputChannel, lspJar: string, host: string, port: number): ServerOptions {
+function runServer(outputChannel: vscode.OutputChannel, lspJar: string, host: string, port: number): ServerOptions {
   return () => new Promise((resolve, reject) => {
     const server = net.createServer(socket => {
       server.close();
