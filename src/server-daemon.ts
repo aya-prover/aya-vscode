@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as net from "net";
+import * as path from "path";
 import * as vscode from 'vscode';
 import * as child_process from "child_process";
 import { LanguageClientOptions, RevealOutputChannelOn } from "vscode-languageclient";
@@ -8,22 +9,22 @@ import * as hightlight from './highlight';
 
 type Progress = vscode.Progress<{ message?: string; increment?: number }>;
 
-export async function startDaemon(context: vscode.ExtensionContext, lspJar: string, progress: Progress) {
+export async function startDaemon(context: vscode.ExtensionContext, lspExec: string, progress: Progress) {
   progress.report({ message: "Starting Aya", increment: 500 });
   const config = vscode.workspace.getConfiguration("aya");
 
   const outputChannel = vscode.window.createOutputChannel("Aya");
   context.subscriptions.push(outputChannel);
-  outputChannel.appendLine(`Aya Language Server: ${lspJar}`);
+  outputChannel.appendLine(`Aya Language Server: ${lspExec}`);
 
   let mode: string = config.get<string>("lsp.mode") ?? "client";
   let port: number = config.get<number>("lsp.port") ?? 11451;
   let host: string = config.get<string>("lsp.host") ?? "localhost";
 
   let serverOptions: ServerOptions;
-  if (mode === "server") serverOptions = runServer(outputChannel, lspJar, host, port);
+  if (mode === "server") serverOptions = runServer(outputChannel, lspExec, host, port);
   else if (mode === "client") serverOptions = runClient(host, port);
-  else serverOptions = runDebug(outputChannel, lspJar);
+  else serverOptions = runDebug(outputChannel, lspExec);
 
   let languageClient = createLanguageClient(serverOptions);
   let languageClientDisposable = languageClient.start();
@@ -41,21 +42,21 @@ export async function startDaemon(context: vscode.ExtensionContext, lspJar: stri
     context.subscriptions.push(languageClientDisposable);
   }));
 
-  progress.report({ message: "Waiting for typechecking...", increment: 1500 });
+  progress.report({ message: "Aya started", increment: 1500 });
   await languageClient.onReady();
   setupAyaSpecialFeatures(languageClient);
 }
 
-function runDebug(outputChannel: vscode.OutputChannel, lspJar: string): ServerOptions {
+function runDebug(outputChannel: vscode.OutputChannel, lspExec: string): ServerOptions {
   return () => new Promise((resolve, reject) => {
-    const proc = spawnJava(outputChannel, lspJar, ["--mode", "debug", "--port", "0"]);
+    const proc = spawnJava(outputChannel, lspExec, ["--mode", "debug", "--port", "0"]);
     proc.on("exit", (code, sig) => outputChannel.appendLine(`The language server exited with ${code} (${sig})`));
     proc.on("error", e => reject(e));
     proc.on("spawn", () => resolve(proc));
   });
 }
 
-function runServer(outputChannel: vscode.OutputChannel, lspJar: string, host: string, port: number): ServerOptions {
+function runServer(outputChannel: vscode.OutputChannel, lspExec: string, host: string, port: number): ServerOptions {
   return () => new Promise((resolve, reject) => {
     const server = net.createServer(socket => {
       server.close();
@@ -63,14 +64,14 @@ function runServer(outputChannel: vscode.OutputChannel, lspJar: string, host: st
     });
     server.listen(port, host, () => {
       const tcpPort = (server.address() as net.AddressInfo).port.toString();
-      spawnJava(outputChannel, lspJar, ["--mode", "client", "--port", tcpPort]);
+      spawnJava(outputChannel, lspExec, ["--mode", "client", "--port", tcpPort]);
     });
     server.on("error", e => reject(e));
   });
 }
 
-function spawnJava(outputChannel: vscode.OutputChannel, jar: string, args: string[]): child_process.ChildProcess {
-  const proc = child_process.spawn("java", ["--enable-preview", "-jar", jar].concat(args));
+function spawnJava(outputChannel: vscode.OutputChannel, lspExec: string, args: string[]): child_process.ChildProcess {
+  const proc = child_process.spawn(lspExec, args);
 
   const outputCallback = (data: any) => outputChannel.append(`${data}`);
   proc.stdout.on("data", outputCallback);
@@ -119,17 +120,27 @@ export async function findAya(context: vscode.ExtensionContext): Promise<string 
   const config = vscode.workspace.getConfiguration("aya");
 
   if (!config.get<boolean>("lsp.enabled")) {
-    const message = "Aya language server is disabled";
-    await vscode.window.showInformationMessage(message);
+    await vscode.window.showInformationMessage("Aya language server is disabled");
     return null;
   }
 
-  let lspJar = config.get<string>("lsp.path");
-  if (lspJar && fs.existsSync(lspJar)) {
-    return lspJar;
+  let lspExec = config.get<string>("lsp.path");
+  if (lspExec && fs.existsSync(lspExec)) {
+    return lspExec;
   }
 
-  await vscode.window.showWarningMessage("Cannot find language server jar");
+  const sysPath = process.env['PATH'];
+  if (sysPath) {
+    const pathParts = sysPath.split(path.delimiter);
+    for (const pathPart of pathParts) {
+      const binPath = path.join(pathPart, "aya-lsp");
+      if (fs.existsSync(binPath)) {
+        return binPath;
+      }
+    }
+  }
+
+  await vscode.window.showWarningMessage("Cannot find aya language server");
   return null;
 }
 
