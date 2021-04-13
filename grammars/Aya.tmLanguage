@@ -50,7 +50,24 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(data|struct|module|open|import|extends|new)[[:space:]]+([^:,;\\\(\){}@"[:space:]]+)</string>
+			<string>(data|open[[:space:]]+data|struct|extends|new)[[:space:]]+([^:,;\\\(\){}@"[:space:]]+)</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.aya</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>support.other</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(open[[:space:]]+import|open|module|import)[[:space:]]+([^:,;\\\(\){}@"[:space:]]+)</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -71,7 +88,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(Sig|Pi|\\|match|impossible|abusing|infix|infixl|infixr|fixl|fixr|fix|twin|hType|uType|ooType|Type|ooType|Set|Prop|as|public|private|using|hiding|coerce|erase|inline)</string>
+			<string>(open|Sig|Pi|\\|match|impossible|abusing|infix|infixl|infixr|fixl|fixr|fix|twin|hType|uType|ooType|Type|ooType|Set|Prop|as|public|private|using|hiding|coerce|erase|inline)</string>
 			<key>name</key>
 			<string>keyword.other.aya</string>
 		</dict>
