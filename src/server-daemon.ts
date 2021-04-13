@@ -47,7 +47,7 @@ export async function startDaemon(context: vscode.ExtensionContext, lspJar: stri
 }
 
 function runClient(context: vscode.ExtensionContext, outputChannel: vscode.OutputChannel, lspJar: string, host: string, port: number): ServerOptions {
-  const proc = child_process.spawn("java", ["-jar", lspJar, "--mode", "server", "--host", host, "--port", port.toString()]);
+  const proc = child_process.spawn("java", ["--enable-preview", "-jar", lspJar, "--mode", "server", "--host", host, "--port", port.toString()]);
   const outputCallback = (data: any) => outputChannel.append(`${data}`);
   proc.stdout.on("data", outputCallback);
   proc.stderr.on("data", outputCallback);
@@ -63,7 +63,7 @@ function runServer(context: vscode.ExtensionContext, outputChannel: vscode.Outpu
     });
     server.listen(port, host, () => {
       const tcpPort = (server.address() as net.AddressInfo).port.toString();
-      const proc = child_process.spawn("java", ["-jar", lspJar, "--mode", "client", "--port", tcpPort]);
+      const proc = child_process.spawn("java", ["--enable-preview", "-jar", lspJar, "--mode", "client", "--port", tcpPort]);
 
       const outputCallback = (data: any) => outputChannel.append(`${data}`);
       proc.stdout.on("data", outputCallback);
