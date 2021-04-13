@@ -25,7 +25,7 @@ export interface Symbol {
   kind: Kind,
 };
 
-export interface SyntaxHighlightParams {
+export interface HighlightResult {
   uri: string,
   symbols: Symbol[],
 };
@@ -75,7 +75,7 @@ function buildTokens(builder: vscode.SemanticTokensBuilder, symbols: Symbol[]) {
 
 var lastHighlight: vscode.Disposable | null = null;
 
-export function applyHighlight(param: SyntaxHighlightParams) {
+export function applyHighlight(param: HighlightResult) {
   const selector = { language: "aya", scheme: "file" };
   const legend = new vscode.SemanticTokensLegend(TOKEN_TYPES, TOKEN_MODIFIERS);
 
