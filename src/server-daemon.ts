@@ -5,7 +5,6 @@ import * as child_process from "child_process";
 import { LanguageClientOptions, RevealOutputChannelOn } from "vscode-languageclient";
 import { LanguageClient, ServerOptions, StreamInfo } from "vscode-languageclient/node";
 import * as hightlight from './highlight';
-import { ChildProcess } from 'node:child_process';
 
 type Progress = vscode.Progress<{ message?: string; increment?: number }>;
 
@@ -70,7 +69,7 @@ function runServer(outputChannel: vscode.OutputChannel, lspJar: string, host: st
   });
 }
 
-function spawnJava(outputChannel: vscode.OutputChannel, jar: string, args: string[]): ChildProcess {
+function spawnJava(outputChannel: vscode.OutputChannel, jar: string, args: string[]): child_process.ChildProcess {
   const proc = child_process.spawn("java", ["--enable-preview", "-jar", jar].concat(args));
 
   const outputCallback = (data: any) => outputChannel.append(`${data}`);
