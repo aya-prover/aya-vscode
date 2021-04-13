@@ -52,7 +52,7 @@
                 },
                 "aya.lsp.path": {
                     "type": "string",
-                    "description": "Specifies the local path of the aya language server jar, mostly used for debugging"
+                    "description": "Specifies the local path of the aya language server, mostly used for debugging"
                 }
             }
         },
