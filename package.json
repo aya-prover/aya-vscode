@@ -32,7 +32,7 @@
             {
                 "command": "aya.lsp.command.load",
                 "key": "ctrl+c ctrl+l",
-				"mac": "ctrl+c ctrl+l",
+                "mac": "ctrl+c ctrl+l",
                 "when": "editorLangId == aya"
             }
         ],
