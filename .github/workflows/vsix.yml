@@ -27,6 +27,6 @@ jobs:
         args: "package"
     - uses: actions/upload-artifact@v2
       with:
-        name: vsix package
+        name: aya-prover-vscode-extension
         path: ./aya-prover-vscode-*.vsix
 
