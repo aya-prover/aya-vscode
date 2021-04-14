@@ -4,6 +4,12 @@
     "description": "Aya Prover support for VSCode",
     "version": "0.0.1",
     "publisher": "aya-prover",
+    "repository": {
+        "url": "https://github.com/aya-prover/aya-vscode"
+    },
+    "bugs": {
+        "url": "https://github.com/aya-prover/aya-vscode/issues"
+    },
     "engines": {
         "vscode": "^1.55.0"
     },
