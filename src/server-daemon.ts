@@ -121,6 +121,7 @@ function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client: Langu
     ayaStatusBar.show();
 
     let uri = document.uri.toString();
+    // TODO: make this request typed
     let result = client.sendRequest<hightlight.HighlightResult>("aya/load", uri);
     result.then(hightlight.applyHighlight).catch(console.log);
     ayaStatusBar.hide();
