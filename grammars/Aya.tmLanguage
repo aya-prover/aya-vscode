@@ -87,8 +87,30 @@
 			<string>(def|prim)[[:space:]]+([^:;\\\(\){}@"[:space:]]+)</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.aya</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.aya</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.type.aya</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>(open|Sig|Pi|\\|match|impossible|abusing|infix|infixl|infixr|fixl|fixr|fix|twin|hType|uType|ooType|Type|ooType|Set|Prop|as|public|private|using|hiding|coerce|erase|inline)</string>
+			<string>(variable)[[:space:]]+(([^:,;\\\(\){}@"[:space:]]+([[:space:]]*,[[:space:]]*)?)+)[[:space:]]*\:[[:space:]]*([^:,;\\\(\){}@"[:space:]]+)</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>(bind|looser|tighter|open|Sig|Pi|\\|match|impossible|abusing|infix|infixl|infixr|fixl|fixr|fix|twin|hType|uType|hlevel|ulevel|ooType|Type|ooType|Set|uSet|Prop|as|public|private|using|hiding|coerce|erase|inline)</string>
 			<key>name</key>
 			<string>keyword.other.aya</string>
 		</dict>

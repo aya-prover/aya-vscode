@@ -60,6 +60,7 @@ function tokenFor(kind: Kind): Token | null {
     case Kind.ConDef: return make("property", ["definition"]);
     case Kind.FieldDef: return make("property", ["definition"]);
     case Kind.PrimDef: return make("function", ["definition", "defaultLibrary"]);
+    case Kind.Operator: return make("function", ["definition"]);
   }
   return null;
 }
