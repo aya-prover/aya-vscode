@@ -30,12 +30,6 @@
 			<string>comment.block.aya</string>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>-?\d+</string>
-			<key>name</key>
-			<string>constant.numeric.aya</string>
-		</dict>
-		<dict>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -67,7 +61,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(open[[:space:]]+import|open|module|import)[[:space:]]+([^:,;\\\(\){}@"[:space:]]+)</string>
+			<string>(open[[:space:]]+import|open(?![[:space:]]data)|module|import)[[:space:]]+([^:,;\\\(\){}@"[:space:]]+)</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -80,7 +74,7 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.aya</string>
+					<string>entity.name.function.aya</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -110,7 +104,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(bind|looser|tighter|open|Sig|Pi|\\|match|impossible|abusing|infix|infixl|infixr|fixl|fixr|fix|twin|hType|uType|hlevel|ulevel|ooType|Type|ooType|Set|uSet|Prop|as|public|private|using|hiding|coerce|erase|inline)</string>
+			<string>\b(bind|looser|tighter|open|Sig|Pi|\\|match|impossible|abusing|infix|infixl|infixr|fixl|fixr|fix|twin|hType|uType|hlevel|ulevel|ooType|Type|ooType|Set|Prop|as|public|private|using|hiding|coerce|erase|inline)\b</string>
 			<key>name</key>
 			<string>keyword.other.aya</string>
 		</dict>
@@ -127,6 +121,12 @@
 			<string>"</string>
 			<key>name</key>
 			<string>string.quoted.double.aya</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b-?\d+\b</string>
+			<key>name</key>
+			<string>constant.numeric.aya</string>
 		</dict>
 	</array>
 	<key>scopeName</key>
