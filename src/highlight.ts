@@ -18,6 +18,7 @@ export enum Kind {
   StructCall,
   ConCall,
   FieldCall,
+  PrimCall,
 };
 
 export interface Symbol {
@@ -54,13 +55,21 @@ function tokenFor(kind: Kind): Token | null {
   let make = (type: string, mods: string[]): Token => ({ tokenType: type, tokenModifiers: mods });
   switch (kind) {
     case Kind.ModuleDef: return make("namespace", ["definition"]);
+    case Kind.Operator: return make("function", ["definition"]);
+    
     case Kind.FnDef: return make("function", ["definition"]);
     case Kind.DataDef: return make("enum", ["definition"]);
     case Kind.StructDef: return make("struct", ["definition"]);
     case Kind.ConDef: return make("property", ["definition"]);
     case Kind.FieldDef: return make("property", ["definition"]);
     case Kind.PrimDef: return make("function", ["definition", "defaultLibrary"]);
-    case Kind.Operator: return make("function", ["definition"]);
+    
+    case Kind.FnCall: return make("function", ["definition"]);
+    case Kind.DataCall: return make("enum", ["definition"]);
+    case Kind.StructCall: return make("struct", ["definition"]);
+    case Kind.ConCall: return make("property", ["definition"]);
+    case Kind.FieldCall: return make("property", ["definition"]);
+    case Kind.PrimCall: return make("function", ["definition", "defaultLibrary"]);
   }
   return null;
 }
