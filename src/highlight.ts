@@ -91,7 +91,6 @@ function highlightSetter(editor: vscode.TextEditor, symbol: Symbol): (target: vs
   console.log("kind = " + symbol.kind);
   const color = EMACS_COLORS.get(symbol.kind);
   if (color) return (_) => {
-    console.log("using builting color");
     const decorationType = vscode.window.createTextEditorDecorationType({
       color: color,
     });
