@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <!--
- |	This file is auto-generated from Aya.yml, do not edit it by hand!
+ |	This file is auto-generated from Aya-vscode.yml, do not edit it by hand!
 -->
 <dict>
 	<key>fileTypes</key>
@@ -30,77 +30,28 @@
 			<string>comment.block.aya</string>
 		</dict>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.aya</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.type.aya</string>
-				</dict>
-			</dict>
 			<key>match</key>
-			<string>(data|open[[:space:]]+data|struct|extends|new)[[:space:]]+([^:,;\\\(\){}@"[:space:]]+)</string>
+			<string>(data|struct|extends|new)</string>
+			<key>name</key>
+			<string>keyword.other.aya</string>
 		</dict>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.aya</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>support.other</string>
-				</dict>
-			</dict>
 			<key>match</key>
-			<string>(open[[:space:]]+import|open(?![[:space:]]data)|module|import)[[:space:]]+([^:,;\\\(\){}@"[:space:]]+)</string>
+			<string>(open|module|import)</string>
+			<key>name</key>
+			<string>keyword.other.aya</string>
 		</dict>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.aya</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.aya</string>
-				</dict>
-			</dict>
 			<key>match</key>
-			<string>(def|prim)[[:space:]]+([^:;\\\(\){}@"[:space:]]+)</string>
+			<string>(def|prim)</string>
+			<key>name</key>
+			<string>keyword.other.aya</string>
 		</dict>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.aya</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.aya</string>
-				</dict>
-				<key>5</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.type.aya</string>
-				</dict>
-			</dict>
 			<key>match</key>
-			<string>(variable)[[:space:]]+(([^:,;\\\(\){}@"[:space:]]+([[:space:]]*,[[:space:]]*)?)+)[[:space:]]*\:[[:space:]]*([^:,;\\\(\){}@"[:space:]]+)</string>
+			<string>(variable)</string>
+			<key>name</key>
+			<string>keyword.other.aya</string>
 		</dict>
 		<dict>
 			<key>match</key>
