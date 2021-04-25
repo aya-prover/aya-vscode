@@ -37,8 +37,8 @@
         "keybindings": [
             {
                 "command": "aya.lsp.command.load",
-                "key": "ctrl+c ctrl+l",
-                "mac": "ctrl+c ctrl+l",
+                "key": "ctrl+l ctrl+l",
+                "mac": "ctrl+l ctrl+l",
                 "when": "editorLangId == aya"
             }
         ],
