@@ -116,15 +116,15 @@ function createLanguageClient(serverOptions: ServerOptions): LanguageClient {
 function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client: LanguageClient) {
   context.subscriptions.push(vscode.commands.registerCommand("aya.lsp.command.load", async () => {
     if (!vscode.window.activeTextEditor) return;
-    let { document } = vscode.window.activeTextEditor;
-    ayaStatusBar.text = `Loading ${document.uri.path}`;
+    let editor = vscode.window.activeTextEditor;
+    ayaStatusBar.text = `Loading ${editor.document.uri.path}`;
     ayaStatusBar.show();
 
-    let uri = document.uri.toString();
-    document.save();
+    let uri = editor.document.uri.toString();
+    editor.document.save();
     // TODO: make this request typed
     let result = client.sendRequest<hightlight.HighlightResult>("aya/load", uri);
-    result.then(hightlight.applyHighlight).catch(console.log);
+    result.then(h => hightlight.applyHighlight(editor, h)).catch(console.log);
     ayaStatusBar.hide();
   }));
 }

@@ -11,8 +11,7 @@ export enum Kind {
   FieldDef,
   PrimDef,
   // expressions
-  Param,
-  Operator,
+  Generalize,
   FnCall,
   DataCall,
   StructCall,
@@ -43,8 +42,23 @@ const TOKEN_TYPES = [
 ];
 const TOKEN_MODIFIERS = [
   "definition",      // All defs
-  "defaultLibrary"   // PrimDef
+  "defaultLibrary",  // PrimDef
 ];
+
+const EMACS_COLORS = new Map<number, string>([
+  [Kind.FnCall, "#005DAC"],
+  [Kind.FnDef, "#005DAC"],
+  [Kind.PrimCall, "#005DAC"],
+  [Kind.PrimDef, "#005DAC"],
+  [Kind.DataCall, "#218C21"],
+  [Kind.DataDef, "#218C21"],
+  [Kind.StructCall, "#218C21"],
+  [Kind.StructDef, "#218C21"],
+  [Kind.ConCall, "#A021EF"],
+  [Kind.ConDef, "#A021EF"],
+  [Kind.FieldCall, "#A021EF"],
+  [Kind.FieldDef, "#A021EF"],
+]);
 
 interface Token {
   tokenType: string,
@@ -55,7 +69,6 @@ function tokenFor(kind: Kind): Token | null {
   let make = (type: string, mods: string[]): Token => ({ tokenType: type, tokenModifiers: mods });
   switch (kind) {
     case Kind.ModuleDef: return make("namespace", ["definition"]);
-    case Kind.Operator: return make("function", ["definition"]);
     
     case Kind.FnDef: return make("function", ["definition"]);
     case Kind.DataDef: return make("enum", ["definition"]);
@@ -74,28 +87,38 @@ function tokenFor(kind: Kind): Token | null {
   return null;
 }
 
-function buildTokens(builder: vscode.SemanticTokensBuilder, symbols: Symbol[]) {
-  symbols.forEach(symbol => {
+function highlightSetter(editor: vscode.TextEditor, symbol: Symbol): (target: vscode.SemanticTokensBuilder) => void {
+  console.log("kind = " + symbol.kind);
+  const color = EMACS_COLORS.get(symbol.kind);
+  if (color) return (_) => {
+    console.log("using builting color");
+    const decorationType = vscode.window.createTextEditorDecorationType({
+      color: color,
+    });
+    editor.setDecorations(decorationType, [symbol.range]);
+  };
+  
+  return (target) => {
     let token = tokenFor(symbol.kind);
     if (token !== null) {
-      builder.push(symbol.range, token.tokenType, token.tokenModifiers);
+      target.push(symbol.range, token.tokenType, token.tokenModifiers);
     }
-  });
+  };
 }
 
 var lastHighlight: vscode.Disposable | null = null;
 
-export function applyHighlight(param: HighlightResult) {
+export function applyHighlight(editor: vscode.TextEditor, param: HighlightResult) {
   const selector = { language: "aya", scheme: "file" };
   const legend = new vscode.SemanticTokensLegend(TOKEN_TYPES, TOKEN_MODIFIERS);
 
   const provider: vscode.DocumentSemanticTokensProvider = {
     provideDocumentSemanticTokens(document: vscode.TextDocument): vscode.ProviderResult<vscode.SemanticTokens> {
-      const tokensBuilder = new vscode.SemanticTokensBuilder(legend);
+      const builder = new vscode.SemanticTokensBuilder(legend);
       if (document.uri.toString() === param.uri) {
-        buildTokens(tokensBuilder, param.symbols);
+        param.symbols.forEach(symbol => highlightSetter(editor, symbol)(builder));
       }
-      return tokensBuilder.build();
+      return builder.build();
     }
   };
 
