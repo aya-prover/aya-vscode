@@ -3,9 +3,9 @@ import * as net from "net";
 import * as path from "path";
 import * as vscode from 'vscode';
 import * as child_process from "child_process";
+import * as hightlight from './highlight';
 import { LanguageClientOptions, RevealOutputChannelOn } from "vscode-languageclient";
 import { LanguageClient, ServerOptions, StreamInfo } from "vscode-languageclient/node";
-import * as hightlight from './highlight';
 
 type Progress = vscode.Progress<{ message?: string; increment?: number }>;
 

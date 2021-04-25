@@ -88,7 +88,6 @@ function tokenFor(kind: Kind): Token | null {
 }
 
 function highlightSetter(editor: vscode.TextEditor, symbol: Symbol): (target: vscode.SemanticTokensBuilder) => void {
-  console.log("kind = " + symbol.kind);
   const color = EMACS_COLORS.get(symbol.kind);
   if (color) return (_) => {
     const decorationType = vscode.window.createTextEditorDecorationType({
