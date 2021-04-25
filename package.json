@@ -94,13 +94,25 @@
                     ".aya"
                 ],
                 "configuration": "./language-configuration.json"
+            },
+            {
+                "id": "aya-embedded",
+                "extensions": [
+                    ".aya-fenced"
+                ],
+                "configuration": "./language-configuration.json"
             }
         ],
         "grammars": [
             {
                 "language": "aya",
-                "scopeName": "source.aya",
+                "scopeName": "source.minimal-aya",
                 "path": "./grammars/Aya.tmLanguage"
+            },
+            {
+                "language": "aya-embedded",
+                "scopeName": "source.aya",
+                "path": "./grammars/Aya-embedded.tmLanguage"
             },
             {
                 "scopeName": "markdown.aya.codeblock",
@@ -109,7 +121,7 @@
                     "text.html.markdown"
                 ],
                 "embeddedLanguages": {
-                    "meta.embedded.block.aya": "aya"
+                    "meta.embedded.block.aya": "aya-embedded"
                 }
             }
         ]
