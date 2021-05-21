@@ -1,4 +1,8 @@
-This is the vscode extension for aya prover.
+This is the
+
+# VSCode extension for Aya prover
+
+[![build vsix](https://github.com/aya-prover/aya-vscode/actions/workflows/vsix.yml/badge.svg)](https://github.com/aya-prover/aya-vscode/actions/workflows/vsix.yml)
 
 You need `yarn` to setup this project by
 ```
