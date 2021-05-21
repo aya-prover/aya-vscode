@@ -52,9 +52,9 @@ export async function startDaemon(context: vscode.ExtensionContext, lspExec: str
 
 function runDebug(outputChannel: vscode.OutputChannel, lspExec: string): ServerOptions {
   return () => new Promise((resolve, reject) => {
-    const proc = spawnJava(outputChannel, lspExec, ["--mode", "debug", "--port", "0"]);
+    const proc = spawnJava(outputChannel, lspExec, ["--mode", "debug"]);
     proc.on("exit", (code, sig) => outputChannel.appendLine(`The language server exited with ${code} (${sig})`));
-    proc.on("error", e => reject(e));
+    proc.on("error", reject);
     proc.on("spawn", () => resolve(proc));
   });
 }
@@ -69,7 +69,7 @@ function runServer(outputChannel: vscode.OutputChannel, lspExec: string, host: s
       const tcpPort = (server.address() as net.AddressInfo).port.toString();
       spawnJava(outputChannel, lspExec, ["--mode", "client", "--port", tcpPort]);
     });
-    server.on("error", e => reject(e));
+    server.on("error", reject);
   });
 }
 
@@ -146,7 +146,7 @@ export async function findAya(context: vscode.ExtensionContext): Promise<string 
   if (sysPath) {
     const pathParts = sysPath.split(path.delimiter);
     for (const pathPart of pathParts) {
-      const binPath = path.join(pathPart, "aya-lsp");
+      const binPath = path.join(pathPart, isWindows() ? "aya-lsp.bat" : "aya-lsp");
       if (fs.existsSync(binPath)) {
         return binPath;
       }
@@ -157,3 +157,6 @@ export async function findAya(context: vscode.ExtensionContext): Promise<string 
   return null;
 }
 
+export function isWindows(): boolean {
+  return process.platform === "win32";
+}
