@@ -2,8 +2,6 @@ This is the
 
 # VSCode extension for Aya prover
 
-[![build vsix](https://github.com/aya-prover/aya-vscode/actions/workflows/vsix.yml/badge.svg)](https://github.com/aya-prover/aya-vscode/actions/workflows/vsix.yml)
-
 You need `yarn` to setup this project by
 ```
 yarn install
@@ -11,3 +9,5 @@ yarn install
 
 If you don't have `yarn`, run `npm install -g yarn` to install.
 
+GitHub actions is enabled for this project, but we cannot attach SVGs to the README due to VSCode restrictions.
+You can download per-commit builds as artifacts of the GitHub actions workflows.
