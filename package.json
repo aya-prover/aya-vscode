@@ -2,6 +2,7 @@
     "name": "aya-prover-vscode",
     "displayName": "Aya Prover",
     "description": "Aya Prover support for VSCode",
+    "license": "GPL-3.0",
     "version": "0.0.1",
     "publisher": "aya-prover",
     "repository": {
