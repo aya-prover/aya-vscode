@@ -104,7 +104,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(bind|looser|tighter|open|Sig|Pi|\\|match|impossible|abusing|infix|infixl|infixr|fixl|fixr|fix|twin|hType|uType|hlevel|ulevel|ooType|Type|ooType|Set|Prop|as|public|private|using|hiding|coerce|erase|inline)\b</string>
+			<string>\b(example|counterexample|bind|looser|tighter|open|Sig|Pi|\\|match|impossible|abusing|infix|infixl|infixr|fixl|fixr|fix|twin|hType|uType|hlevel|ulevel|ooType|Type|ooType|Set|Prop|as|public|private|using|hiding|coerce|erase|inline)\b</string>
 			<key>name</key>
 			<string>keyword.other.aya</string>
 		</dict>
