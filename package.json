@@ -41,6 +41,12 @@
                 "key": "ctrl+l ctrl+l",
                 "mac": "ctrl+l ctrl+l",
                 "when": "editorLangId == aya"
+            },
+            {
+                "command": "aya.lsp.command.compute-type",
+                "key": "ctrl+l ctrl+p",
+                "mac": "ctrl+l ctrl+p",
+                "when": "editorLangId == aya"
             }
         ],
         "configuration": {

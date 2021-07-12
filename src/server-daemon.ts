@@ -4,6 +4,7 @@ import * as path from "path";
 import * as vscode from 'vscode';
 import * as child_process from "child_process";
 import * as hightlight from './highlight';
+import * as compute_type from './compute-type';
 import { LanguageClientOptions, RevealOutputChannelOn } from "vscode-languageclient";
 import { LanguageClient, ServerOptions, StreamInfo } from "vscode-languageclient/node";
 
@@ -122,10 +123,22 @@ function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client: Langu
 
     let uri = editor.document.uri.toString();
     editor.document.save();
-    // TODO: make this request typed
     let result = client.sendRequest<hightlight.HighlightResult>("aya/load", uri);
     result.then(h => hightlight.applyHighlight(editor, h)).catch(console.log);
     ayaStatusBar.hide();
+  }));
+
+  context.subscriptions.push(vscode.commands.registerCommand("aya.lsp.command.compute-type", async () => {
+    if (!vscode.window.activeTextEditor) return;
+    let editor = vscode.window.activeTextEditor;
+
+    let uri = editor.document.uri.toString();
+    editor.document.save();
+    let result = client.sendRequest<compute_type.ComputeTypeResult>("aya/computeType", {
+      uri: uri,
+      position: editor.selection.active,
+    });
+    result.then(r => compute_type.applyComputedType(editor, r)).catch(console.log);
   }));
 }
 
