@@ -33,7 +33,7 @@ export function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client
       uri: editor.document.uri.toString(),
       position: editor.selection.active,
     }),
-    compute.applyComputedType,
+    compute.applyComputedTerm,
   )));
 
   context.subscriptions.push(vscode.commands.registerCommand("aya.lsp.command.compute-nf", jsonRequest(
@@ -42,6 +42,6 @@ export function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client
       uri: editor.document.uri.toString(),
       position: editor.selection.active,
     }),
-    compute.applyComputedType,
+    compute.applyComputedTerm,
   )));
 }

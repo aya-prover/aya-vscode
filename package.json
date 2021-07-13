@@ -12,7 +12,7 @@
         "url": "https://github.com/aya-prover/aya-vscode/issues"
     },
     "engines": {
-        "vscode": "^1.55.0"
+        "vscode": "^1.58.0"
     },
     "categories": [
         "Snippets",
@@ -148,17 +148,17 @@
         "test": "node ./out/test/runTest.js"
     },
     "devDependencies": {
-        "@types/glob": "^7.1.3",
-        "@types/mocha": "^8.0.4",
-        "@types/node": "^12.11.7",
-        "@types/vscode": "^1.55.0",
-        "@typescript-eslint/eslint-plugin": "^4.14.1",
-        "@typescript-eslint/parser": "^4.14.1",
-        "eslint": "^7.19.0",
-        "glob": "^7.1.6",
-        "mocha": "^8.2.1",
-        "typescript": "^4.1.3",
-        "vscode-test": "^1.5.0"
+        "@types/glob": "^7.1.4",
+        "@types/mocha": "^8.2.3",
+        "@types/node": "^16.3.1",
+        "@types/vscode": "^1.58.0",
+        "@typescript-eslint/eslint-plugin": "^4.28.3",
+        "@typescript-eslint/parser": "^4.28.3",
+        "eslint": "^7.30.0",
+        "glob": "^7.1.7",
+        "mocha": "^9.0.2",
+        "typescript": "^4.3.5",
+        "vscode-test": "^1.5.2"
     },
     "dependencies": {
         "vscode-languageclient": "^7.0.0"
