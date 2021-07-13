@@ -3,8 +3,8 @@ import * as net from "net";
 import * as path from "path";
 import * as vscode from 'vscode';
 import * as child_process from "child_process";
-import * as hightlight from './highlight';
-import * as compute from './compute-term';
+import * as features from './features';
+
 import { LanguageClientOptions, RevealOutputChannelOn } from "vscode-languageclient";
 import { LanguageClient, ServerOptions, StreamInfo } from "vscode-languageclient/node";
 
@@ -45,7 +45,7 @@ export async function startDaemon(context: vscode.ExtensionContext, lspExec: str
 
   progress.report({ message: "Aya started", increment: 1500 });
   await languageClient.onReady();
-  setupAyaSpecialFeatures(context, languageClient);
+  features.setupAyaSpecialFeatures(context, languageClient);
 }
 
 function runDebug(outputChannel: vscode.OutputChannel, lspExec: string): ServerOptions {
@@ -109,48 +109,6 @@ function createLanguageClient(serverOptions: ServerOptions): LanguageClient {
   };
 
   return new LanguageClient("aya", "Aya language client", serverOptions, clientOptions);
-}
-
-function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client: LanguageClient) {
-  type ActionHandler = (_: vscode.TextEditor) => void;
-
-  const newAction = (fn: ActionHandler) => async () => {
-    if (!vscode.window.activeTextEditor) return;
-    let editor = vscode.window.activeTextEditor;
-    editor.document.save();
-    fn(editor);
-  };
-
-  type ParamBuilder = (_: vscode.TextEditor) => any;
-  type ResultHandler<ResultType> = (_: vscode.TextEditor, result: ResultType) => void;
-
-  const jsonRequest = <ResultType>(method: string, paramBuilder: ParamBuilder, resultHandler: ResultHandler<ResultType>) => newAction(
-    (editor) => client.sendRequest<ResultType>(method, paramBuilder(editor)).then(result => resultHandler(editor, result)).catch(console.log)
-  );
-
-  context.subscriptions.push(vscode.commands.registerCommand("aya.lsp.command.load", jsonRequest(
-    "aya/load",
-    (editor) => editor.document.uri.toString(),
-    hightlight.applyHighlight,
-  )));
-
-  context.subscriptions.push(vscode.commands.registerCommand("aya.lsp.command.compute-type", jsonRequest(
-    "aya/computeType",
-    (editor) => ({
-      uri: editor.document.uri.toString(),
-      position: editor.selection.active,
-    }),
-    compute.applyComputedType,
-  )));
-
-  context.subscriptions.push(vscode.commands.registerCommand("aya.lsp.command.compute-nf", jsonRequest(
-    "aya/computeNF",
-    (editor) => ({
-      uri: editor.document.uri.toString(),
-      position: editor.selection.active,
-    }),
-    compute.applyComputedType,
-  )));
 }
 
 export async function findAya(context: vscode.ExtensionContext): Promise<string | null> {
