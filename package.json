@@ -47,6 +47,12 @@
                 "key": "ctrl+l ctrl+p",
                 "mac": "ctrl+l ctrl+p",
                 "when": "editorLangId == aya"
+            },
+            {
+                "command": "aya.lsp.command.compute-nf",
+                "key": "ctrl+l ctrl+n",
+                "mac": "ctrl+l ctrl+n",
+                "when": "editorLangId == aya"
             }
         ],
         "configuration": {
