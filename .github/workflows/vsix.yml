@@ -2,9 +2,9 @@ name: build vsix
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -15,18 +15,17 @@ jobs:
         node-version: [15.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm install -g yarn
-    - run: yarn install
-    - uses: lannonbr/vsce-action@master
-      with:
-        args: "package"
-    - uses: actions/upload-artifact@v2
-      with:
-        name: aya-prover-vscode-extension
-        path: ./aya-prover-vscode-*.vsix
-
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install -g pnpm
+      - run: pnpm install
+      - uses: lannonbr/vsce-action@master
+        with:
+          args: "package"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: aya-prover-vscode-extension
+          path: ./aya-prover-vscode-*.vsix
