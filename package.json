@@ -83,9 +83,13 @@
                     "default": 11451,
                     "description": "The port number which the language server listens on."
                 },
-                "aya.lsp.path": {
+                "aya.lsp.exec": {
                     "type": "string",
-                    "description": "Specifies the local path of the aya language server, mostly used for debugging"
+                    "description": "Specifies the local path of the aya language server executable, mostly used for debugging"
+                },
+                "aya.lsp.fatJar": {
+                    "type": "string",
+                    "description": "Specifies the local path of the fatjar of the aya language server"
                 }
             }
         },
