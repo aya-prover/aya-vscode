@@ -1,9 +1,10 @@
 import * as vscode from 'vscode';
 import * as daemon from './server-daemon';
+import * as find from './find';
 
 export async function activate(context: vscode.ExtensionContext) {
-  let lspJar = await daemon.findAya(context);
-  if (lspJar === null) return;
+  let lspLoadPath = await find.findAya(context);
+  if (lspLoadPath === null) return;
 
   const initTasks: PromiseLike<void>[] = [];
 
@@ -12,7 +13,7 @@ export async function activate(context: vscode.ExtensionContext) {
     cancellable: false,
     title: "Loading Aya library",
   }, async progress => {
-    await daemon.startDaemon(context, lspJar!, progress);
+    await daemon.startDaemon(context, lspLoadPath!, progress);
     return new Promise(resolve => setTimeout(resolve, 5000));
   }));
 
