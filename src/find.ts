@@ -11,13 +11,18 @@ export async function findAya(context: vscode.ExtensionContext): Promise<string 
     await vscode.window.showInformationMessage("Aya language server is disabled");
     return null;
   }
-
-  let lspFatJarPath = config.get<string>("lsp.fatJar");
-  let lspExecPath = config.get<string>("lsp.exec");
-  if (lspFatJarPath && fs.existsSync(lspFatJarPath)) {
-    return lspFatJarPath;
-  } else if (lspExecPath && fs.existsSync(lspExecPath)) {
-    return lspExecPath;
+  /*
+    let lspFatJarPath = config.get<string>("lsp.fatJar");
+    let lspExecPath = config.get<string>("lsp.exec");
+    if (lspFatJarPath && await os_utils.fsExists(lspFatJarPath)) {
+      return lspFatJarPath;
+    } else if (lspExecPath && await os_utils.fsExists(lspExecPath)) {
+      return lspExecPath;
+    }
+  */
+  let lspLoadPath = config.get<string>("lsp.path");
+  if (lspLoadPath && await os_utils.fsExists(lspLoadPath)) {
+    return lspLoadPath;
   }
 
   const sysPath = process.env['PATH'];
