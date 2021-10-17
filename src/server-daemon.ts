@@ -59,7 +59,7 @@ export async function startDaemon(context: vscode.ExtensionContext, lspLoadPath:
 
 function runDebugFatJar(outputChannel: vscode.OutputChannel, lspLoadPath: string, javaPath: string): ServerOptions {
   return () => new Promise((resolve, reject) => {
-    const proc = spawnFatJar(outputChannel, lspLoadPath, ["--enable-preview", "-jar", "--mode", "debug"], javaPath);
+    const proc = spawnJava(outputChannel, lspLoadPath, ["--enable-preview", "-jar", "--mode", "debug"], javaPath);
     proc.on("exit", (code, sig) => outputChannel.appendLine(`The language server exited with ${code} (${sig})`));
     proc.on("error", reject);
     proc.on("spawn", () => resolve(proc));
@@ -68,7 +68,7 @@ function runDebugFatJar(outputChannel: vscode.OutputChannel, lspLoadPath: string
 
 function runDebug(outputChannel: vscode.OutputChannel, lspLoadPath: string): ServerOptions {
   return () => new Promise((resolve, reject) => {
-    const proc = spawnExec(outputChannel, lspLoadPath, ["--mode", "debug"]);
+    const proc = spawnJava(outputChannel, lspLoadPath, ["--mode", "debug"]);
     proc.on("exit", (code, sig) => outputChannel.appendLine(`The language server exited with ${code} (${sig})`));
     proc.on("error", reject);
     proc.on("spawn", () => resolve(proc));
@@ -83,7 +83,7 @@ function runServerFatJar(outputChannel: vscode.OutputChannel, lspLoadPath: strin
     });
     server.listen(port, host, () => {
       const tcpPort = (server.address() as net.AddressInfo).port.toString();
-      spawnFatJar(outputChannel, lspLoadPath, ["--enable-preview", "-jar", "--mode", "client", "--port", tcpPort], javaPath);
+      spawnJava(outputChannel, lspLoadPath, ["--enable-preview", "-jar", "--mode", "client", "--port", tcpPort], javaPath);
     });
     server.on("error", reject);
   });
@@ -97,27 +97,28 @@ function runServer(outputChannel: vscode.OutputChannel, lspLoadPath: string, hos
     });
     server.listen(port, host, () => {
       const tcpPort = (server.address() as net.AddressInfo).port.toString();
-      spawnExec(outputChannel, lspLoadPath, ["--mode", "client", "--port", tcpPort]);
+      spawnJava(outputChannel, lspLoadPath, ["--mode", "client", "--port", tcpPort]);
     });
     server.on("error", reject);
   });
 }
 
-function spawnFatJar(outputChannel: vscode.OutputChannel, lspLoadPath: string, args: string[], javaPath: string): child_process.ChildProcess {
+function spawnJava(outputChannel: vscode.OutputChannel, lspLoadPath: string, args: string[]): child_process.ChildProcess;
+function spawnJava(outputChannel: vscode.OutputChannel, lspLoadPath: string, args: string[], javaPath: string): child_process.ChildProcess;
+function spawnJava(outputChannel: vscode.OutputChannel, lspLoadPath: string, args: string[], javaPath?: string): child_process.ChildProcess {
+  if (javaPath === undefined) {
+    const proc = child_process.spawn(lspLoadPath, args);
+
+    const outputCallback = (data: any) => outputChannel.append(`${data}`);
+    proc.stdout.on("data", outputCallback);
+    proc.stderr.on("data", outputCallback);
+
+    proc.on("exit", (code, sig) => outputChannel.appendLine(`The language server exited with ${code} (${sig})`));
+    return proc;
+  }
   args.splice(2, 0, lspLoadPath);
 
   const proc = child_process.spawn(javaPath, args);
-
-  const outputCallback = (data: any) => outputChannel.append(`${data}`);
-  proc.stdout.on("data", outputCallback);
-  proc.stderr.on("data", outputCallback);
-
-  proc.on("exit", (code, sig) => outputChannel.appendLine(`The language server exited with ${code} (${sig})`));
-  return proc;
-}
-
-function spawnExec(outputChannel: vscode.OutputChannel, lspLoadPath: string, args: string[]): child_process.ChildProcess {
-  const proc = child_process.spawn(lspLoadPath, args);
 
   const outputCallback = (data: any) => outputChannel.append(`${data}`);
   proc.stdout.on("data", outputCallback);
