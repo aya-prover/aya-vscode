@@ -26,12 +26,3 @@ export function correctBinName(binName: string): string {
 export function correctScriptName(binName: string): string {
   return `${binName}${isWindows() ? '.bat' : ''}`;
 }
-
-export async function fsExists(path: fs.PathLike): Promise<boolean> {
-  try {
-    await fs.promises.access(path);
-    return true;
-  } catch {
-    return false;
-  }
-}

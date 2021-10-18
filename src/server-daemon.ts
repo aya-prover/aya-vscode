@@ -24,17 +24,9 @@ export async function startDaemon(context: vscode.ExtensionContext, lspLoadPath:
   let host: string = config.get<string>("lsp.host") ?? "localhost";
 
   let serverOptions: ServerOptions;
-  let extname = path.extname(lspLoadPath);
-  if (extname === ".jar") {
-    let javaPath = await findJavaExecutable("java");
-    if (mode === "server") serverOptions = runServer(outputChannel, lspLoadPath, host, port, javaPath);
-    else if (mode === "client") serverOptions = runClient(host, port);
-    else serverOptions = runDebug(outputChannel, lspLoadPath, javaPath);
-  } else {
-    if (mode === "server") serverOptions = runServer(outputChannel, lspLoadPath, host, port);
-    else if (mode === "client") serverOptions = runClient(host, port);
-    else serverOptions = runDebug(outputChannel, lspLoadPath);
-  }
+  if (mode === "server") serverOptions = runServer(outputChannel, lspLoadPath, host, port);
+  else if (mode === "client") serverOptions = runClient(host, port);
+  else serverOptions = runDebug(outputChannel, lspLoadPath);
 
   let languageClient = createLanguageClient(serverOptions);
   let languageClientDisposable = languageClient.start();
@@ -57,60 +49,43 @@ export async function startDaemon(context: vscode.ExtensionContext, lspLoadPath:
   features.setupAyaSpecialFeatures(context, languageClient);
 }
 
-function runDebug(outputChannel: vscode.OutputChannel, lspLoadPath: string, javaPath?: string): ServerOptions {
-  return () => new Promise((resolve, reject) => {
-    const proc = chooseProc(javaPath, outputChannel, lspLoadPath);
-    proc.on("exit", (code, sig) => outputChannel.appendLine(`The language server exited with ${code} (${sig})`));
+function runDebug(outputChannel: vscode.OutputChannel, lspLoadPath: string): ServerOptions {
+  return () => new Promise(async (resolve, reject) => {
+    const proc = spawnLsp(outputChannel, lspLoadPath, ["--mode", "debug"]);
     proc.on("error", reject);
     proc.on("spawn", () => resolve(proc));
   });
 }
 
-function chooseProc(javaPath: string | undefined, outputChannel: vscode.OutputChannel, lspLoadPath: string): child_process.ChildProcess {
-  if (!javaPath) {
-    return spawnExec(outputChannel, lspLoadPath, ["--mode", "debug"]);
-  } else {
-    return spawnFatJar(outputChannel, lspLoadPath, ["--enable-preview", "-jar", "--mode", "debug"], javaPath);
-  }
-}
-
-function runServer(outputChannel: vscode.OutputChannel, lspLoadPath: string, host: string, port: number, javaPath?: string): ServerOptions {
+function runServer(outputChannel: vscode.OutputChannel, lspLoadPath: string, host: string, port: number): ServerOptions {
   return () => new Promise((resolve, reject) => {
     const server = net.createServer(socket => {
       server.close();
       resolve({ reader: socket, writer: socket });
     });
-    server.listen(port, host, () => {
+    server.listen(port, host, async () => {
       const tcpPort = (server.address() as net.AddressInfo).port.toString();
-      if (!javaPath) {
-        spawnExec(outputChannel, lspLoadPath, ["--mode", "client", "--port", tcpPort]);
-      } else {
-        spawnFatJar(outputChannel, lspLoadPath, ["--enable-preview", "-jar", "--mode", "client", "--port", tcpPort], javaPath!);
-      }
+      spawnLsp(outputChannel, lspLoadPath, ["--mode", "client", "--port", tcpPort]);
     });
     server.on("error", reject);
   });
 }
 
-function spawnFatJar(outputChannel: vscode.OutputChannel, lspLoadPath: string, args: string[], javaPath: string): child_process.ChildProcess {
-  args.splice(2, 0, lspLoadPath);
-
-  const proc = child_process.spawn(javaPath, args);
-  return procMessage(outputChannel, proc);
-}
-
-function spawnExec(outputChannel: vscode.OutputChannel, lspLoadPath: string, args: string[]): child_process.ChildProcess {
-  const proc = child_process.spawn(lspLoadPath, args);
-  return procMessage(outputChannel, proc);
-}
-
-function procMessage(outputChannel: vscode.OutputChannel, proc: child_process.ChildProcess): child_process.ChildProcess {
+function spawnLsp(outputChannel: vscode.OutputChannel, lspLoadPath: string, lspArgs: Array<string>): child_process.ChildProcess {
+  const exec = buildExec(lspLoadPath).concat(lspArgs);
+  outputChannel.appendLine(exec.join(" "));
+  const proc = child_process.spawn(exec[0], exec.slice(1));
   const outputCallback = (data: any) => outputChannel.append(`${data}`);
-  proc.stdout!.on("data", outputCallback);
-  proc.stderr!.on("data", outputCallback);
-
+  proc.stdout.on("data", outputCallback);
+  proc.stderr.on("data", outputCallback);
   proc.on("exit", (code, sig) => outputChannel.appendLine(`The language server exited with ${code} (${sig})`));
   return proc;
+}
+
+function buildExec(lspLoadPath: string): Array<string> {
+  const extname = path.extname(lspLoadPath);
+  if (extname === ".jar") return [findJavaExecutable("java"), "--enable-preview", "--jar", lspLoadPath];
+  else return [lspLoadPath];
 }
 
 function runClient(host: string, port: number): ServerOptions {

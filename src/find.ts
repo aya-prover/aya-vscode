@@ -3,7 +3,6 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as os_utils from './os-utils';
 
-
 export async function findAya(context: vscode.ExtensionContext): Promise<string | null> {
   const config = vscode.workspace.getConfiguration("aya");
 
@@ -13,7 +12,7 @@ export async function findAya(context: vscode.ExtensionContext): Promise<string 
   }
 
   let lspLoadPath = config.get<string>("lsp.path");
-  if (lspLoadPath && await os_utils.fsExists(lspLoadPath)) {
+  if (lspLoadPath && fs.existsSync(lspLoadPath)) {
     return lspLoadPath;
   }
 
@@ -32,25 +31,23 @@ export async function findAya(context: vscode.ExtensionContext): Promise<string 
   return null;
 }
 
-export async function findJavaExecutable(rawBinName: string): Promise<string> {
+export function findJavaExecutable(rawBinName: string): string {
   const binName = os_utils.correctBinName(rawBinName);
 
   // First search java.home setting
   const userJavaHome = vscode.workspace.getConfiguration('java').get('home') as string;
 
   if (userJavaHome) {
-    let candidate = await findJavaExecutableInJavaHome(userJavaHome, binName);
-    if (candidate)
-      return candidate;
+    let candidate = findJavaExecutableInJavaHome(userJavaHome, binName);
+    if (candidate) return candidate;
   }
 
   // Then search each JAVA_HOME
   const envJavaHome = process.env['JAVA_HOME'];
 
   if (envJavaHome) {
-    const candidate = await findJavaExecutableInJavaHome(envJavaHome, binName);
-    if (candidate)
-      return candidate;
+    const candidate = findJavaExecutableInJavaHome(envJavaHome, binName);
+    if (candidate) return candidate;
   }
 
   const sysPath = process.env['PATH'];
@@ -68,14 +65,15 @@ export async function findJavaExecutable(rawBinName: string): Promise<string> {
   return binName;
 }
 
-async function findJavaExecutableInJavaHome(javaHome: string, binName: string): Promise<string | null> {
+function findJavaExecutableInJavaHome(javaHome: string, binName: string): string | null {
   const workspaces = javaHome.split(path.delimiter);
 
   for (const workspace of workspaces) {
     const binPath = path.join(workspace, 'bin', binName);
 
-    if (await os_utils.fsExists(binPath))
+    if (fs.existsSync(binPath)) {
       return binPath;
+    }
   }
   return null;
 }
