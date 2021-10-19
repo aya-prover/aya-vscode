@@ -84,7 +84,7 @@ function spawnLsp(outputChannel: vscode.OutputChannel, lspLoadPath: string, lspA
 
 function buildExec(lspLoadPath: string): Array<string> {
   const extname = path.extname(lspLoadPath);
-  if (extname === ".jar") return [findJavaExecutable("java"), "--enable-preview", "--jar", lspLoadPath];
+  if (extname === ".jar") return [findJavaExecutable("java"), "--enable-preview", "-jar", lspLoadPath];
   else return [lspLoadPath];
 }
 
