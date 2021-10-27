@@ -31,31 +31,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(data|struct|extends|new)</string>
-			<key>name</key>
-			<string>keyword.other.aya</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(open|module|import)</string>
-			<key>name</key>
-			<string>keyword.other.aya</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(def|prim)</string>
-			<key>name</key>
-			<string>keyword.other.aya</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>(variable)</string>
-			<key>name</key>
-			<string>keyword.other.aya</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b(example|counterexample|bind|looser|tighter|open|Sig|Pi|\\|match|impossible|abusing|infix|infixl|infixr|fixl|fixr|fix|twin|hType|uType|hlevel|ulevel|ooType|Type|ooType|Set|Prop|as|public|private|using|hiding|coerce|erase|inline)\b</string>
+			<string>\b(impossible|extends|prim|new|module|abusing|forall|tighter|import|variable|infix|inline|Type|infixr|lsuc|infixl|def|counterexample|open|private|lmax|\\|using|as|universe|erase|coerce|data|bind|Sig|public|Pi|looser|example|struct|hiding|match)\b</string>
 			<key>name</key>
 			<string>keyword.other.aya</string>
 		</dict>
