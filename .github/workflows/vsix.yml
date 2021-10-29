@@ -7,7 +7,21 @@ on:
     branches: [main]
 
 jobs:
+  move-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Move ci tag
+        uses: s3krit/walking-tag-action@master
+        with:
+          TAG_NAME: nightly-build
+          TAG_MESSAGE: |
+            Last commit build by the CI
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        if: github.ref == 'refs/heads/main'
+
   build:
+    needs: [move-tag]
     runs-on: ubuntu-latest
 
     strategy:
@@ -30,3 +44,16 @@ jobs:
         name: aya-prover-vscode-extension
         path: ./aya-prover-vscode-*.vsix
 
+    - name: Update the CI tag
+      uses: Xotl/cool-github-releases@v1
+      with:
+        mode: update
+        isPrerelease: false
+        tag_name: nightly-build
+        release_name: "Automatic CI builds"
+        body_mrkdwn: |
+          _This is the newest build, but Github date can't be updated. Corresponding commit: ${{ github.sha }}_
+        assets: ./aya-prover-vscode-*.vsix
+        replace_assets: true
+        github_token: ${{ secrets.GH_TOKEN }}
+      if: github.ref == 'refs/heads/main'
