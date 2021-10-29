@@ -43,6 +43,8 @@ jobs:
       with:
         name: aya-prover-vscode-extension
         path: ./aya-prover-vscode-*.vsix
+    
+    -run: cp -a ./aya-prover-vscode-*.vsix ./aya-prover-vscode-nightly.vsix
 
     - name: Update the CI tag
       uses: Xotl/cool-github-releases@v1
@@ -53,7 +55,7 @@ jobs:
         release_name: "Automatic CI builds"
         body_mrkdwn: |
           _This is the newest build, but Github date can't be updated. Corresponding commit: ${{ github.sha }}_
-        assets: ./aya-prover-vscode-*.vsix
+        assets: ./aya-prover-vscode-nightly.vsix
         replace_assets: true
         github_token: ${{ secrets.GH_TOKEN }}
       if: github.ref == 'refs/heads/main'
