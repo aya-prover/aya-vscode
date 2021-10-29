@@ -44,7 +44,7 @@ jobs:
         name: aya-prover-vscode-extension
         path: ./aya-prover-vscode-*.vsix
     
-    -run: cp -a ./aya-prover-vscode-*.vsix ./aya-prover-vscode-nightly.vsix
+    - run: cp -a ./aya-prover-vscode-*.vsix ./aya-prover-vscode-nightly.vsix
 
     - name: Update the CI tag
       uses: Xotl/cool-github-releases@v1
