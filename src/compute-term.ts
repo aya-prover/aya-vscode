@@ -30,5 +30,7 @@ export function applyComputedTerm(
     },
   ]);
 
-  editor.selection = new vscode.Selection(r.range.start, r.range.end);
+  const start = new vscode.Position(r.range.start.line, r.range.start.character);
+  const end = new vscode.Position(r.range.end.line, r.range.end.character);
+  editor.selections = [new vscode.Selection(start, end)];
 }
