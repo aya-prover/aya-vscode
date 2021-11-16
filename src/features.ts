@@ -44,4 +44,11 @@ export function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client
     }),
     compute.applyComputedTerm,
   )));
+
+  // FIXME: workaround of https://github.com/aya-prover/aya-vscode/issues/15
+  vscode.workspace.onDidChangeTextDocument(e => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) return;
+    hightlight.removeHighlight(editor);
+  });
 }

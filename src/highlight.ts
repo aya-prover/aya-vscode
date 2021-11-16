@@ -87,12 +87,16 @@ function tokenFor(kind: Kind): Token | null {
   return null;
 }
 
+var lastHighlight: vscode.Disposable | null = null;
+var lastDecorations: Array<vscode.TextEditorDecorationType> = [];
+
 function highlightSetter(editor: vscode.TextEditor, symbol: Symbol): (target: vscode.SemanticTokensBuilder) => void {
   const color = EMACS_COLORS.get(symbol.kind);
   if (color) return (_) => {
     const decorationType = vscode.window.createTextEditorDecorationType({
       color: color,
     });
+    lastDecorations.push(decorationType);
     editor.setDecorations(decorationType, [symbol.range]);
   };
   
@@ -104,11 +108,24 @@ function highlightSetter(editor: vscode.TextEditor, symbol: Symbol): (target: vs
   };
 }
 
-var lastHighlight: vscode.Disposable | null = null;
+export function removeHighlight(editor: vscode.TextEditor) {
+  if (lastHighlight !== null) {
+    lastHighlight.dispose();
+    lastHighlight = null;
+  }
+  if (lastDecorations.length != 0) {
+    // If rangesOrOptions is empty, the existing decorations with the given decoration type will be removed.
+    // No way to remove all decorations? are you kidding me vscode?
+    lastDecorations.forEach(element => editor.setDecorations(element, []));
+    lastDecorations = [];
+  }
+}
 
 export function applyHighlight(editor: vscode.TextEditor, param: HighlightResult) {
   const selector = { language: "aya", scheme: "file" };
   const legend = new vscode.SemanticTokensLegend(TOKEN_TYPES, TOKEN_MODIFIERS);
+  // I finally find the right way to re-apply highlights.
+  removeHighlight(editor);
 
   const provider: vscode.DocumentSemanticTokensProvider = {
     provideDocumentSemanticTokens(document: vscode.TextDocument): vscode.ProviderResult<vscode.SemanticTokens> {
@@ -120,6 +137,5 @@ export function applyHighlight(editor: vscode.TextEditor, param: HighlightResult
     }
   };
 
-  if (lastHighlight !== null) lastHighlight.dispose();
   lastHighlight = vscode.languages.registerDocumentSemanticTokensProvider(selector, provider, legend);
 }
