@@ -18,17 +18,17 @@ export enum Kind {
   ConCall,
   FieldCall,
   PrimCall,
-};
+}
 
 export interface Symbol {
   range: vscode.Range,
   kind: Kind,
-};
+}
 
 export interface HighlightResult {
   uri: string,
   symbols: Symbol[],
-};
+}
 
 /**
  * All possible token types from Aya language server
@@ -63,7 +63,7 @@ const EMACS_COLORS = new Map<number, string>([
 interface Token {
   tokenType: string,
   tokenModifiers: string[],
-};
+}
 
 function tokenFor(kind: Kind): Token | null {
   let make = (type: string, mods: string[]): Token => ({ tokenType: type, tokenModifiers: mods });
@@ -87,8 +87,8 @@ function tokenFor(kind: Kind): Token | null {
   return null;
 }
 
-var lastHighlight: vscode.Disposable | null = null;
-var lastDecorations: Array<vscode.TextEditorDecorationType> = [];
+let lastHighlight: vscode.Disposable | null = null;
+let lastDecorations: Array<vscode.TextEditorDecorationType> = [];
 
 function highlightSetter(editor: vscode.TextEditor, symbol: Symbol): (target: vscode.SemanticTokensBuilder) => void {
   const color = EMACS_COLORS.get(symbol.kind);

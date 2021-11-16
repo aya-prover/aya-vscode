@@ -2,8 +2,6 @@
  * See https://github.com/fwcd/vscode-kotlin/blob/master/src/util/osUtils.ts
  */
 
-import * as fs from 'fs';
-
 export function isWindows(): boolean {
   return process.platform === "win32";
 }

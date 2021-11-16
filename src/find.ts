@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as os_utils from './os-utils';
 
-export async function findAya(context: vscode.ExtensionContext): Promise<string | null> {
+export async function findAya(): Promise<string | null> {
   const config = vscode.workspace.getConfiguration("aya");
 
   if (!config.get<boolean>("lsp.enabled")) {

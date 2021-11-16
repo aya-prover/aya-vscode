@@ -3,7 +3,7 @@ import * as daemon from './server-daemon';
 import * as find from './find';
 
 export async function activate(context: vscode.ExtensionContext) {
-  let lspLoadPath = await find.findAya(context);
+  let lspLoadPath = await find.findAya();
   if (lspLoadPath === null) return;
 
   const initTasks: PromiseLike<void>[] = [];

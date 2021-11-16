@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { LanguageClient } from "vscode-languageclient/node";
 
-import * as hightlight from './highlight';
+import * as highlight from './highlight';
 import * as compute from './compute-term';
 
 export function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client: LanguageClient) {
@@ -24,7 +24,7 @@ export function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client
   context.subscriptions.push(vscode.commands.registerCommand("aya.lsp.command.load", jsonRequest(
     "aya/load",
     (editor) => editor.document.uri.toString(),
-    hightlight.applyHighlight,
+    highlight.applyHighlight,
   )));
 
   context.subscriptions.push(vscode.commands.registerCommand("aya.lsp.command.compute-type", jsonRequest(
@@ -46,9 +46,9 @@ export function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client
   )));
 
   // FIXME: workaround of https://github.com/aya-prover/aya-vscode/issues/15
-  vscode.workspace.onDidChangeTextDocument(e => {
+  vscode.workspace.onDidChangeTextDocument(() => {
     const editor = vscode.window.activeTextEditor;
     if (!editor) return;
-    hightlight.removeHighlight(editor);
+    highlight.removeHighlight(editor);
   });
 }
