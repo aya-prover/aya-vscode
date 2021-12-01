@@ -20,7 +20,8 @@
     ],
     "main": "./out/extension.js",
     "activationEvents": [
-        "onLanguage:aya"
+        "onLanguage:aya",
+        "workspaceContains:aya.json"
     ],
     "contributes": {
         "commands": [

@@ -45,6 +45,12 @@ export function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client
     compute.applyComputedTerm,
   )));
 
+  vscode.window.onDidChangeActiveTextEditor(() => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) return;
+    highlight.highlight(editor);
+  });
+
   // FIXME: workaround of https://github.com/aya-prover/aya-vscode/issues/15
   vscode.workspace.onDidChangeTextDocument(() => {
     const editor = vscode.window.activeTextEditor;
