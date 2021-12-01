@@ -30,6 +30,8 @@ export interface HighlightResult {
   symbols: Symbol[],
 }
 
+export type HighlightResponse = HighlightResult[];
+
 /**
  * All possible token types from Aya language server
  */
@@ -60,82 +62,41 @@ const EMACS_COLORS = new Map<number, string>([
   [Kind.FieldDef, "#A021EF"],
 ]);
 
-interface Token {
-  tokenType: string,
-  tokenModifiers: string[],
-}
+let highlights : HighlightResponse | null = null;
+let decorations: Array<vscode.TextEditorDecorationType> = [];
 
-function tokenFor(kind: Kind): Token | null {
-  let make = (type: string, mods: string[]): Token => ({ tokenType: type, tokenModifiers: mods });
-  switch (kind) {
-    case Kind.ModuleDef: return make("namespace", ["definition"]);
-    
-    case Kind.FnDef: return make("function", ["definition"]);
-    case Kind.DataDef: return make("enum", ["definition"]);
-    case Kind.StructDef: return make("struct", ["definition"]);
-    case Kind.ConDef: return make("property", ["definition"]);
-    case Kind.FieldDef: return make("property", ["definition"]);
-    case Kind.PrimDef: return make("function", ["definition", "defaultLibrary"]);
-    
-    case Kind.FnCall: return make("function", ["definition"]);
-    case Kind.DataCall: return make("enum", ["definition"]);
-    case Kind.StructCall: return make("struct", ["definition"]);
-    case Kind.ConCall: return make("property", ["definition"]);
-    case Kind.FieldCall: return make("property", ["definition"]);
-    case Kind.PrimCall: return make("function", ["definition", "defaultLibrary"]);
-  }
-  return null;
-}
-
-let lastHighlight: vscode.Disposable | null = null;
-let lastDecorations: Array<vscode.TextEditorDecorationType> = [];
-
-function highlightSetter(editor: vscode.TextEditor, symbol: Symbol): (target: vscode.SemanticTokensBuilder) => void {
+function highlightSetter(editor: vscode.TextEditor, symbol: Symbol): () => void {
   const color = EMACS_COLORS.get(symbol.kind);
-  if (color) return (_) => {
+  return () => {
     const decorationType = vscode.window.createTextEditorDecorationType({
       color: color,
     });
-    lastDecorations.push(decorationType);
+    decorations.push(decorationType);
     editor.setDecorations(decorationType, [symbol.range]);
-  };
-  
-  return (target) => {
-    let token = tokenFor(symbol.kind);
-    if (token !== null) {
-      target.push(symbol.range, token.tokenType, token.tokenModifiers);
-    }
   };
 }
 
 export function removeHighlight(editor: vscode.TextEditor) {
-  if (lastHighlight !== null) {
-    lastHighlight.dispose();
-    lastHighlight = null;
-  }
-  if (lastDecorations.length != 0) {
+  if (decorations.length !== 0) {
     // If rangesOrOptions is empty, the existing decorations with the given decoration type will be removed.
     // No way to remove all decorations? are you kidding me vscode?
-    lastDecorations.forEach(element => editor.setDecorations(element, []));
-    lastDecorations = [];
+    decorations.forEach(element => editor.setDecorations(element, []));
+    decorations = [];
   }
 }
 
-export function applyHighlight(editor: vscode.TextEditor, param: HighlightResult) {
-  const selector = { language: "aya", scheme: "file" };
-  const legend = new vscode.SemanticTokensLegend(TOKEN_TYPES, TOKEN_MODIFIERS);
+export function applyHighlight(editor: vscode.TextEditor, res: HighlightResponse) {
   // I finally find the right way to re-apply highlights.
   removeHighlight(editor);
+  highlights = res;
+  highlight(editor);
+}
 
-  const provider: vscode.DocumentSemanticTokensProvider = {
-    provideDocumentSemanticTokens(document: vscode.TextDocument): vscode.ProviderResult<vscode.SemanticTokens> {
-      const builder = new vscode.SemanticTokensBuilder(legend);
-      if (document.uri.toString() === param.uri) {
-        param.symbols.forEach(symbol => highlightSetter(editor, symbol)(builder));
-      }
-      return builder.build();
-    }
-  };
+export function highlight(editor: vscode.TextEditor) {
+  var uri = editor.document.uri.toString();
+  findHighlight(uri)?.symbols.forEach(symbol => highlightSetter(editor, symbol)());
+}
 
-  lastHighlight = vscode.languages.registerDocumentSemanticTokensProvider(selector, provider, legend);
+function findHighlight(uri: string) : HighlightResult | undefined {
+  return highlights?.find((a) => a.uri === uri);
 }
