@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from "vscode";
+import {Uri} from "vscode";
 
 export enum Kind {
   // definitions
@@ -93,10 +94,10 @@ export function applyHighlight(editor: vscode.TextEditor, res: HighlightResponse
 }
 
 export function highlight(editor: vscode.TextEditor) {
-  var uri = editor.document.uri.toString();
+  const uri = editor.document.uri;
   findHighlight(uri)?.symbols.forEach(symbol => highlightSetter(editor, symbol)());
 }
 
-function findHighlight(uri: string) : HighlightResult | undefined {
-  return highlights?.find((a) => a.uri === uri);
+function findHighlight(uri: Uri) : HighlightResult | undefined {
+  return highlights?.find((a) => Uri.parse(a.uri).toString() === uri.toString());
 }

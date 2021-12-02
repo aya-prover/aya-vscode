@@ -48,13 +48,20 @@ export function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client
   vscode.window.onDidChangeActiveTextEditor(() => {
     const editor = vscode.window.activeTextEditor;
     if (!editor) return;
+    console.log("Tab change");
     highlight.highlight(editor);
   });
 
   // FIXME: workaround of https://github.com/aya-prover/aya-vscode/issues/15
-  vscode.workspace.onDidChangeTextDocument(() => {
+  vscode.workspace.onDidChangeTextDocument((e) => {
+    console.log(e);
     const editor = vscode.window.activeTextEditor;
     if (!editor) return;
+    // VSC seems to trigger this event when the log is printed. Stop it!
+    if (editor.document.uri.toString() !== e.document.uri.toString()) return;
+    if (e.contentChanges.length == 0) return;
+    console.log("Document content change");
+    // Now it's safe to remove the highlight
     highlight.removeHighlight(editor);
   });
 }
