@@ -1,11 +1,7 @@
 import * as vscode from 'vscode';
 import * as daemon from './server-daemon';
-import * as find from './find';
 
 export async function activate(context: vscode.ExtensionContext) {
-  let lspLoadPath = await find.findAya();
-  if (lspLoadPath === null) return;
-
   const initTasks: PromiseLike<void>[] = [];
 
   initTasks.push(vscode.window.withProgress({
@@ -13,7 +9,7 @@ export async function activate(context: vscode.ExtensionContext) {
     cancellable: false,
     title: "Loading Aya library",
   }, async progress => {
-    await daemon.startDaemon(context, lspLoadPath!, progress);
+    await daemon.startDaemon(context, progress);
     return new Promise(resolve => setTimeout(resolve, 5000));
   }));
 
@@ -21,4 +17,5 @@ export async function activate(context: vscode.ExtensionContext) {
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() { }
+export function deactivate() {
+}

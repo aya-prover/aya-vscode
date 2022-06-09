@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { LanguageClient } from "vscode-languageclient/node";
-
 import * as highlight from './highlight';
 import * as compute from './compute-term';
 
@@ -59,7 +58,7 @@ export function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client
     if (!editor) return;
     // VSC seems to trigger this event when the log is printed. Stop it!
     if (editor.document.uri.toString() !== e.document.uri.toString()) return;
-    if (e.contentChanges.length == 0) return;
+    if (e.contentChanges.length === 0) return;
     console.log("Document content change");
     // Now it's safe to remove the highlight
     highlight.removeHighlight(editor);

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from "vscode";
-import {Uri} from "vscode";
+import { Uri } from "vscode";
 
 export enum Kind {
   // definitions
@@ -63,7 +63,7 @@ const EMACS_COLORS = new Map<number, string>([
   [Kind.FieldDef, "#A021EF"],
 ]);
 
-let highlights : HighlightResponse | null = null;
+let highlights: HighlightResponse | null = null;
 let decorations: Array<vscode.TextEditorDecorationType> = [];
 
 function highlightSetter(editor: vscode.TextEditor, symbol: Symbol): () => void {
@@ -98,6 +98,6 @@ export function highlight(editor: vscode.TextEditor) {
   findHighlight(uri)?.symbols.forEach(symbol => highlightSetter(editor, symbol)());
 }
 
-function findHighlight(uri: Uri) : HighlightResult | undefined {
+function findHighlight(uri: Uri): HighlightResult | undefined {
   return highlights?.find((a) => Uri.parse(a.uri).toString() === uri.toString());
 }
