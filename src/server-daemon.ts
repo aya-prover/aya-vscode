@@ -7,6 +7,7 @@ import * as features from './features';
 import { LanguageClientOptions, RevealOutputChannelOn } from "vscode-languageclient";
 import { LanguageClient, ServerOptions, StreamInfo } from "vscode-languageclient/node";
 import { findAya, findJavaExecutable } from "./find";
+import { AyaMiddleware } from "./middleware";
 import { AYA_SELECTOR } from "./constant";
 
 type Progress = vscode.Progress<{ message?: string; increment?: number }>;
@@ -113,6 +114,7 @@ function createLanguageClient(serverOptions: ServerOptions): LanguageClient {
         vscode.workspace.createFileSystemWatcher('**/*.aya'),
       ]
     },
+    middleware: new AyaMiddleware(),
     revealOutputChannelOn: RevealOutputChannelOn.Error
   };
 
