@@ -2,6 +2,7 @@
 import * as vscode from "vscode";
 import { Uri } from "vscode";
 
+/** @see lsp/src/main/java/org/aya/lsp/models/HighlightResult.java */
 export enum Kind {
   // definitions
   ModuleDef,
@@ -32,21 +33,6 @@ export interface HighlightResult {
 }
 
 export type HighlightResponse = HighlightResult[];
-
-/**
- * All possible token types from Aya language server
- */
-const TOKEN_TYPES = [
-  "namespace", // ModuleDef
-  "function",  // FnDef, PrimDef
-  "enum",      // DataDef
-  "struct",    // StructDef
-  "property",  // FieldDef, ConDef
-];
-const TOKEN_MODIFIERS = [
-  "definition",      // All defs
-  "defaultLibrary",  // PrimDef
-];
 
 const EMACS_COLORS = new Map<number, string>([
   [Kind.FnCall, "#005DAC"],
