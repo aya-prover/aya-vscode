@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 import * as daemon from './server-daemon';
+import { AYA_SELECTOR } from "./constant";
+import { UnicodeCompletionProvider } from "./unicode";
 
 export async function activate(context: vscode.ExtensionContext) {
   const initTasks: PromiseLike<void>[] = [];
@@ -12,6 +14,12 @@ export async function activate(context: vscode.ExtensionContext) {
     await daemon.startDaemon(context, progress);
     return new Promise(resolve => setTimeout(resolve, 5000));
   }));
+
+  context.subscriptions.push(vscode.languages.registerCompletionItemProvider(
+    AYA_SELECTOR,
+    new UnicodeCompletionProvider(),
+    "\\"
+  ))
 
   await Promise.all(initTasks);
 }

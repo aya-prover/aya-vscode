@@ -7,6 +7,7 @@ import * as features from './features';
 import { LanguageClientOptions, RevealOutputChannelOn } from "vscode-languageclient";
 import { LanguageClient, ServerOptions, StreamInfo } from "vscode-languageclient/node";
 import { findAya, findJavaExecutable } from "./find";
+import { AYA_SELECTOR } from "./constant";
 
 type Progress = vscode.Progress<{ message?: string; increment?: number }>;
 
@@ -105,9 +106,7 @@ function connectToPort(host: string, port: number): Promise<StreamInfo> {
 
 function createLanguageClient(serverOptions: ServerOptions): LanguageClient {
   const clientOptions: LanguageClientOptions = {
-    documentSelector: [
-      { language: 'aya', scheme: 'file' },
-    ],
+    documentSelector: AYA_SELECTOR,
     synchronize: {
       configurationSection: 'aya',
       fileEvents: [
