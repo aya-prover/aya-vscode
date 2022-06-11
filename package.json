@@ -138,6 +138,104 @@
                     "meta.embedded.block.aya": "aya-embedded"
                 }
             }
+        ],
+        "colors": [
+            {
+                "id": "aya.color.FnCall",
+                "description": "Color for function calls",
+                "defaults": {
+                    "light": "#005DAC",
+                    "dark": "#79c0ff"
+                }
+            },
+            {
+                "id": "aya.color.FnDef",
+                "description": "Color for function definitions",
+                "defaults": {
+                    "light": "#005DAC",
+                    "dark": "#79c0ff"
+                }
+            },
+            {
+                "id": "aya.color.PrimCall",
+                "description": "Color for primitive calls",
+                "defaults": {
+                    "light": "#005DAC",
+                    "dark": "#79c0ff"
+                }
+            },
+            {
+                "id": "aya.color.PrimDef",
+                "description": "Color for primitive definitions",
+                "defaults": {
+                    "light": "#005DAC",
+                    "dark": "#79c0ff"
+                }
+            },
+            {
+                "id": "aya.color.DataCall",
+                "description": "Color for data calls",
+                "defaults": {
+                    "light": "#218C21",
+                    "dark": "#33d333"
+                }
+            },
+            {
+                "id": "aya.color.DataDef",
+                "description": "Color for data definitions",
+                "defaults": {
+                    "light": "#218C21",
+                    "dark": "#33d333"
+                }
+            },
+            {
+                "id": "aya.color.StructCall",
+                "description": "Color for struct calls",
+                "defaults": {
+                    "light": "#218C21",
+                    "dark": "#33d333"
+                }
+            },
+            {
+                "id": "aya.color.StructDef",
+                "description": "Color for struct definitions",
+                "defaults": {
+                    "light": "#218C21",
+                    "dark": "#33d333"
+                }
+            },
+            {
+                "id": "aya.color.ConCall",
+                "description": "Color for constructor calls",
+                "defaults": {
+                    "light": "#A021EF",
+                    "dark": "#d2a8ff"
+                }
+            },
+            {
+                "id": "aya.color.ConDef",
+                "description": "Color for constructor definitions",
+                "defaults": {
+                    "light": "#A021EF",
+                    "dark": "#d2a8ff"
+                }
+            },
+            {
+                "id": "aya.color.FieldCall",
+                "description": "Color for field calls",
+                "defaults": {
+                    "light": "#A021EF",
+                    "dark": "#d2a8ff"
+                }
+            },
+            {
+                "id": "aya.color.FieldDef",
+                "description": "Color for field definitions",
+                "defaults": {
+                    "light": "#A021EF",
+                    "dark": "#d2a8ff"
+                }
+            }
         ]
     },
     "scripts": {

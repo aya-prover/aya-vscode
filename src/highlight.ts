@@ -34,19 +34,19 @@ export interface HighlightResult {
 
 export type HighlightResponse = HighlightResult[];
 
-const EMACS_COLORS = new Map<number, string>([
-  [Kind.FnCall, "#005DAC"],
-  [Kind.FnDef, "#005DAC"],
-  [Kind.PrimCall, "#005DAC"],
-  [Kind.PrimDef, "#005DAC"],
-  [Kind.DataCall, "#218C21"],
-  [Kind.DataDef, "#218C21"],
-  [Kind.StructCall, "#218C21"],
-  [Kind.StructDef, "#218C21"],
-  [Kind.ConCall, "#A021EF"],
-  [Kind.ConDef, "#A021EF"],
-  [Kind.FieldCall, "#A021EF"],
-  [Kind.FieldDef, "#A021EF"],
+const EMACS_COLORS = new Map<number, vscode.ThemeColor>([
+  [Kind.FnCall, new vscode.ThemeColor("aya.color.FnCall")],
+  [Kind.FnDef, new vscode.ThemeColor("aya.color.FnDef")],
+  [Kind.PrimCall, new vscode.ThemeColor("aya.color.PrimCall")],
+  [Kind.PrimDef, new vscode.ThemeColor("aya.color.PrimDef")],
+  [Kind.DataCall, new vscode.ThemeColor("aya.color.DataCall")],
+  [Kind.DataDef, new vscode.ThemeColor("aya.color.DataDef")],
+  [Kind.StructCall, new vscode.ThemeColor("aya.color.StructCall")],
+  [Kind.StructDef, new vscode.ThemeColor("aya.color.StructDef")],
+  [Kind.ConCall, new vscode.ThemeColor("aya.color.ConCall")],
+  [Kind.ConDef, new vscode.ThemeColor("aya.color.ConDef")],
+  [Kind.FieldCall, new vscode.ThemeColor("aya.color.FieldCall")],
+  [Kind.FieldDef, new vscode.ThemeColor("aya.color.FieldDef")],
 ]);
 
 let highlights: HighlightResponse | null = null;
