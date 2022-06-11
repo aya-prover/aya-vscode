@@ -19,7 +19,7 @@ export async function activate(context: vscode.ExtensionContext) {
     AYA_SELECTOR,
     new UnicodeCompletionProvider(),
     "\\"
-  ))
+  ));
 
   await Promise.all(initTasks);
 }

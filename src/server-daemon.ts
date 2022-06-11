@@ -26,22 +26,18 @@ export async function startDaemon(context: vscode.ExtensionContext, progress: Pr
   let serverOptions = await startMode(outputChannel, mode, host, port);
   let languageClient = createLanguageClient(serverOptions);
   let languageClientDisposable = languageClient.start();
-  context.subscriptions.push(languageClientDisposable);
 
   context.subscriptions.push(vscode.commands.registerCommand("aya.lsp.command.restart", async () => {
     await languageClient.stop();
-    languageClientDisposable.dispose();
 
     outputChannel.appendLine("");
     outputChannel.appendLine(" === Language Server Restart ===");
     outputChannel.appendLine("");
 
     languageClientDisposable = languageClient.start();
-    context.subscriptions.push(languageClientDisposable);
   }));
 
   progress.report({ message: "Aya started", increment: 1500 });
-  await languageClient.onReady();
   features.setupAyaSpecialFeatures(context, languageClient);
 }
 
