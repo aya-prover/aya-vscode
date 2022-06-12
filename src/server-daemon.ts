@@ -4,49 +4,50 @@ import * as path from "path";
 import * as child_process from "child_process";
 import * as features from './features';
 
-
 import { LanguageClientOptions, RevealOutputChannelOn } from "vscode-languageclient";
 import { LanguageClient, ServerOptions, StreamInfo } from "vscode-languageclient/node";
-import { findJavaExecutable } from "./find";
+import { findAya, findJavaExecutable } from "./find";
+import { AyaMiddleware } from "./middleware";
+import { AYA_SELECTOR } from "./constant";
 
 type Progress = vscode.Progress<{ message?: string; increment?: number }>;
 
-export async function startDaemon(context: vscode.ExtensionContext, lspLoadPath: string, progress: Progress) {
+export async function startDaemon(context: vscode.ExtensionContext, progress: Progress) {
   progress.report({ message: "Starting Aya", increment: 500 });
   const config = vscode.workspace.getConfiguration("aya");
 
   const outputChannel = vscode.window.createOutputChannel("Aya");
   context.subscriptions.push(outputChannel);
-  outputChannel.appendLine(`Aya Language Server: ${lspLoadPath}`);
 
   let mode: string = config.get<string>("lsp.mode") ?? "client";
   let port: number = config.get<number>("lsp.port") ?? 11451;
   let host: string = config.get<string>("lsp.host") ?? "localhost";
 
-  let serverOptions: ServerOptions;
-  if (mode === "server") serverOptions = runServer(outputChannel, lspLoadPath, host, port);
-  else if (mode === "client") serverOptions = runClient(host, port);
-  else serverOptions = runDebug(outputChannel, lspLoadPath);
-
+  let serverOptions = await startMode(outputChannel, mode, host, port);
   let languageClient = createLanguageClient(serverOptions);
   let languageClientDisposable = languageClient.start();
-  context.subscriptions.push(languageClientDisposable);
 
   context.subscriptions.push(vscode.commands.registerCommand("aya.lsp.command.restart", async () => {
     await languageClient.stop();
-    languageClientDisposable.dispose();
 
     outputChannel.appendLine("");
     outputChannel.appendLine(" === Language Server Restart ===");
     outputChannel.appendLine("");
 
     languageClientDisposable = languageClient.start();
-    context.subscriptions.push(languageClientDisposable);
   }));
 
   progress.report({ message: "Aya started", increment: 1500 });
-  await languageClient.onReady();
   features.setupAyaSpecialFeatures(context, languageClient);
+}
+
+async function startMode(outputChannel: vscode.OutputChannel, mode: string, host: string, port: number): Promise<ServerOptions> {
+  if (mode === 'client') return runClient(host, port);
+  let lspLoadPath = await findAya();
+  outputChannel.appendLine(`Aya Language Server: ${lspLoadPath}`);
+  return mode === 'server'
+    ? runServer(outputChannel, lspLoadPath!, host, port)
+    : runDebug(outputChannel, lspLoadPath!);
 }
 
 function runDebug(outputChannel: vscode.OutputChannel, lspLoadPath: string): ServerOptions {
@@ -102,15 +103,14 @@ function connectToPort(host: string, port: number): Promise<StreamInfo> {
 
 function createLanguageClient(serverOptions: ServerOptions): LanguageClient {
   const clientOptions: LanguageClientOptions = {
-    documentSelector: [
-      { language: 'aya', scheme: 'file' },
-    ],
+    documentSelector: AYA_SELECTOR,
     synchronize: {
       configurationSection: 'aya',
       fileEvents: [
         vscode.workspace.createFileSystemWatcher('**/*.aya'),
       ]
     },
+    middleware: new AyaMiddleware(),
     revealOutputChannelOn: RevealOutputChannelOn.Error
   };
 

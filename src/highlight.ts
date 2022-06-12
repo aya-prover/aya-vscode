@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from "vscode";
-import {Uri} from "vscode";
+import { Uri } from "vscode";
 
+/** @see lsp/src/main/java/org/aya/lsp/models/HighlightResult.java */
 export enum Kind {
   // definitions
   ModuleDef,
@@ -33,37 +34,22 @@ export interface HighlightResult {
 
 export type HighlightResponse = HighlightResult[];
 
-/**
- * All possible token types from Aya language server
- */
-const TOKEN_TYPES = [
-  "namespace", // ModuleDef
-  "function",  // FnDef, PrimDef
-  "enum",      // DataDef
-  "struct",    // StructDef
-  "property",  // FieldDef, ConDef
-];
-const TOKEN_MODIFIERS = [
-  "definition",      // All defs
-  "defaultLibrary",  // PrimDef
-];
-
-const EMACS_COLORS = new Map<number, string>([
-  [Kind.FnCall, "#005DAC"],
-  [Kind.FnDef, "#005DAC"],
-  [Kind.PrimCall, "#005DAC"],
-  [Kind.PrimDef, "#005DAC"],
-  [Kind.DataCall, "#218C21"],
-  [Kind.DataDef, "#218C21"],
-  [Kind.StructCall, "#218C21"],
-  [Kind.StructDef, "#218C21"],
-  [Kind.ConCall, "#A021EF"],
-  [Kind.ConDef, "#A021EF"],
-  [Kind.FieldCall, "#A021EF"],
-  [Kind.FieldDef, "#A021EF"],
+const EMACS_COLORS = new Map<number, vscode.ThemeColor>([
+  [Kind.FnCall, new vscode.ThemeColor("aya.color.FnCall")],
+  [Kind.FnDef, new vscode.ThemeColor("aya.color.FnDef")],
+  [Kind.PrimCall, new vscode.ThemeColor("aya.color.PrimCall")],
+  [Kind.PrimDef, new vscode.ThemeColor("aya.color.PrimDef")],
+  [Kind.DataCall, new vscode.ThemeColor("aya.color.DataCall")],
+  [Kind.DataDef, new vscode.ThemeColor("aya.color.DataDef")],
+  [Kind.StructCall, new vscode.ThemeColor("aya.color.StructCall")],
+  [Kind.StructDef, new vscode.ThemeColor("aya.color.StructDef")],
+  [Kind.ConCall, new vscode.ThemeColor("aya.color.ConCall")],
+  [Kind.ConDef, new vscode.ThemeColor("aya.color.ConDef")],
+  [Kind.FieldCall, new vscode.ThemeColor("aya.color.FieldCall")],
+  [Kind.FieldDef, new vscode.ThemeColor("aya.color.FieldDef")],
 ]);
 
-let highlights : HighlightResponse | null = null;
+let highlights: HighlightResponse | null = null;
 let decorations: Array<vscode.TextEditorDecorationType> = [];
 
 function highlightSetter(editor: vscode.TextEditor, symbol: Symbol): () => void {
@@ -98,6 +84,6 @@ export function highlight(editor: vscode.TextEditor) {
   findHighlight(uri)?.symbols.forEach(symbol => highlightSetter(editor, symbol)());
 }
 
-function findHighlight(uri: Uri) : HighlightResult | undefined {
+function findHighlight(uri: Uri): HighlightResult | undefined {
   return highlights?.find((a) => Uri.parse(a.uri).toString() === uri.toString());
 }
