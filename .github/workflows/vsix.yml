@@ -13,8 +13,8 @@ jobs:
       - name: Move ci tag
         uses: s3krit/walking-tag-action@master
         with:
-          TAG_NAME: nightly-build
-          TAG_MESSAGE: |
+          tag-name: nightly-build
+          tag-message: |
             Last commit build by the CI
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
