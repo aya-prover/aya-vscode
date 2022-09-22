@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Move ci tag
-        uses: s3krit/walking-tag-action@master
+        uses: weareyipyip/walking-tag-action@master
         with:
           tag-name: nightly-build
           tag-message: |
