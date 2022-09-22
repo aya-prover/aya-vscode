@@ -31,7 +31,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(impossible|extends|prim|new|module|forall|tighter|import|variable|overlap|infix|inline|Type|infixr|lsuc|infixl|def|mixfix|counterexample|open|private|lmax|\\|using|as|pattern|universe|coerce|opaque|data|bind|Sig|public|Pi|looser|example|struct|hiding|match)\b</string>
+			<string>\b(extends|codata|prim|do|new|Prop|module|forall|tighter|import|completed|let|variable|fixl|overlap|infix|inline|fixr|Type|infixr|Set|infixl|def|counterexample|open|private|in|\\|using|ulift|override|as|pattern|coerce|opaque|data|Sig|public|this|Pi|looser|example|ISet|struct|hiding|match)\b</string>
 			<key>name</key>
 			<string>keyword.other.aya</string>
 		</dict>
