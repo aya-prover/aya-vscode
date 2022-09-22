@@ -35,9 +35,10 @@ jobs:
       uses: pnpm/action-setup@v2.2.2
     - name: Build
       run: pnpm i
-    - uses: lannonbr/vsce-action@master
-      with:
-        args: "package"
+    - name: Install vsce
+      run: pnpm i -g vsce
+    - name: Build vsix
+      run: pnpm package
     - uses: actions/upload-artifact@v2
       with:
         name: aya-prover-vscode-extension
