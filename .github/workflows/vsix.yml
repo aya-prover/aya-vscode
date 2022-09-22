@@ -24,18 +24,17 @@ jobs:
     needs: [move-tag]
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [15.x]
-
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2-beta
       with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm install -g yarn
-    - run: yarn install
+        node-version: 16.x
+    - name: Setup pnpm for sane package management
+      uses: pnpm/action-setup@v2.2.2
+    - name: Build
+      run: pnpm i
     - uses: lannonbr/vsce-action@master
       with:
         args: "package"
