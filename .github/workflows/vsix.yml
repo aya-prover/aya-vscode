@@ -7,18 +7,18 @@ on:
     branches: [main]
 
 jobs:
-  move-tag:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Move ci tag
-        uses: weareyipyip/walking-tag-action@master
-        with:
-          tag-name: nightly-build
-          tag-message: |
-            Last commit build by the CI
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        if: github.ref == 'refs/heads/main'
+  move-tag :
+    runs-on : ubuntu-latest
+    steps :
+      - name : Move ci tag
+        run : |
+          mkdir repo
+          git clone -b "$BRANCH_NAME" "https://github.com/${GITHUB_REPOSITORY}" repo
+          cd repo
+          bash .github/workflows/move-tag.sh "nightly-build" "Last commit build by the CI"
+        env :
+          GITHUB_TOKEN : ${{ secrets.GH_TOKEN }}
+          BRANCH_NAME : ${{ github.head_ref || github.ref_name }}
 
   build:
     needs: [move-tag]
