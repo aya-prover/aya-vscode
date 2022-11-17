@@ -1,7 +1,7 @@
 {
     "comments": {
-        "lineComment": "--",
-        "blockComment": [ "{-", "-}" ]
+        "lineComment": "//",
+        "blockComment": [ "/*", "*/" ]
     },
     "brackets": [
         ["{", "}"],
@@ -11,9 +11,18 @@
         ["(", ")"],
         ["(|", "|)"]
     ],
+    "colorizedBracketPairs": [
+        ["{", "}"],
+        ["{|", "|}"],
+        ["[", "]"],
+        ["[|", "|]"],
+        ["(", ")"],
+        ["(|", "|)"]
+    ],
+    // "wordPattern": "[~!@#$%^&*+=<>?/|[]a-zA-Z_\u2200-\u22FF][~!@#$%^&*+=<>?/|[]a-zA-Z_\u2200-\u22FF0-9]*",
     "autoClosingPairs": [
         { "open": "\"", "close": "\"", "notIn": ["string"] },
-        { "open": "{-", "close": " -}", "notIn": ["string"] },
+        { "open": "/*", "close": " */", "notIn": ["string"] },
         ["{", "}"],
         ["{|", "|}"],
         ["[", "]"],

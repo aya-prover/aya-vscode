@@ -4,6 +4,10 @@ All notable changes to the "aya-prover-vscode" extension will be documented in t
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.4] - 2022-11-17
+### Updated
+- Adapt syntax of dev version of Aya (latest)
+
 ## [0.0.3] - 2021-12-17
 ### Added
 - Load libraries
