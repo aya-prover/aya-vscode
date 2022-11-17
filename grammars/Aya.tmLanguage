@@ -15,7 +15,7 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>--</string>
+			<string>//</string>
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>
@@ -23,21 +23,21 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>{-</string>
+			<string>/*</string>
 			<key>end</key>
-			<string>-}</string>
+			<string>*/</string>
 			<key>name</key>
 			<string>comment.block.aya</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(extends|codata|prim|do|new|Prop|module|forall|tighter|import|completed|let|variable|fixl|overlap|infix|inline|fixr|Type|infixr|Set|infixl|def|counterexample|open|private|in|\\|using|ulift|override|as|pattern|coerce|opaque|data|Sig|public|this|Pi|looser|example|ISet|struct|hiding|match)\b</string>
+			<string>\b(extends|prim|new|module|forall|tighter|import|variable|infix|inline|Type|Set|Prop|ISet|infixr|infixl|fixl|fixr|def|counterexample|open|private|\\|using|as|coerce|data|Sig|public|Pi|looser|example|struct|hiding|match)\b</string>
 			<key>name</key>
 			<string>keyword.other.aya</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>=&gt;|-&gt;|,</string>
+			<string>=&gt;|-&gt;|,|:=|**|\|</string>
 			<key>name</key>
 			<string>keyword.other.aya</string>
 		</dict>
