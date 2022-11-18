@@ -4,9 +4,15 @@ All notable changes to the "aya-prover-vscode" extension will be documented in t
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [0.0.4] - 2022-11-17
+## [0.0.5] - 2022-11-17
 ### Updated
-- Adapt syntax of dev version of Aya (latest)
+- Adapt syntax of dev version of Aya (0.24-SNAPSHOT)
+
+## [0.0.4] - 2022-09-27
+### Added
+- Themable colors
+### Fixed
+- Workaround vscode Uri serialization bug
 
 ## [0.0.3] - 2021-12-17
 ### Added
