@@ -43,7 +43,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>,|\\</string>
+			<string>,|\\|↑|Σ|λ|Π|∀|→|←|⇒|⦇|⦈|⦃|⦄|⟦|⟧</string>
 			<key>name</key>
 			<string>keyword.other.aya</string>
 		</dict>
