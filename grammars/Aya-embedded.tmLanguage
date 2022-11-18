@@ -110,7 +110,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(=&gt;|-&gt;|:=|**)\b</string>
+			<string>\b(=&gt;|-&gt;|:=|\*\*)\b</string>
 			<key>name</key>
 			<string>keyword.other.aya</string>
 		</dict>
