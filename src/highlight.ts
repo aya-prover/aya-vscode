@@ -4,22 +4,9 @@ import { Uri } from "vscode";
 
 /** @see lsp/src/main/java/org/aya/lsp/models/HighlightResult.java */
 export enum Kind {
-  // definitions
-  ModuleDef,
-  FnDef,
-  DataDef,
-  StructDef,
-  ConDef,
-  FieldDef,
-  PrimDef,
+  ModuleDef, FnDef, DataDef, StructDef, ConDef, FieldDef, PrimDef, GeneralizeDef,
   // expressions
-  Generalize,
-  FnCall,
-  DataCall,
-  StructCall,
-  ConCall,
-  FieldCall,
-  PrimCall,
+  FnRef, DataRef, StructRef, ConRef, FieldRef, PrimRef, ModuleRef, GeneralizeRef,
 }
 
 export interface Symbol {
@@ -35,18 +22,22 @@ export interface HighlightResult {
 export type HighlightResponse = HighlightResult[];
 
 const EMACS_COLORS = new Map<number, vscode.ThemeColor>([
-  [Kind.FnCall, new vscode.ThemeColor("aya.color.FnCall")],
+  [Kind.FnRef, new vscode.ThemeColor("aya.color.FnRef")],
   [Kind.FnDef, new vscode.ThemeColor("aya.color.FnDef")],
-  [Kind.PrimCall, new vscode.ThemeColor("aya.color.PrimCall")],
+  [Kind.PrimRef, new vscode.ThemeColor("aya.color.PrimRef")],
   [Kind.PrimDef, new vscode.ThemeColor("aya.color.PrimDef")],
-  [Kind.DataCall, new vscode.ThemeColor("aya.color.DataCall")],
+  [Kind.DataRef, new vscode.ThemeColor("aya.color.DataRef")],
   [Kind.DataDef, new vscode.ThemeColor("aya.color.DataDef")],
-  [Kind.StructCall, new vscode.ThemeColor("aya.color.StructCall")],
+  [Kind.StructRef, new vscode.ThemeColor("aya.color.StructRef")],
   [Kind.StructDef, new vscode.ThemeColor("aya.color.StructDef")],
-  [Kind.ConCall, new vscode.ThemeColor("aya.color.ConCall")],
+  [Kind.ConRef, new vscode.ThemeColor("aya.color.ConRef")],
   [Kind.ConDef, new vscode.ThemeColor("aya.color.ConDef")],
-  [Kind.FieldCall, new vscode.ThemeColor("aya.color.FieldCall")],
+  [Kind.FieldRef, new vscode.ThemeColor("aya.color.FieldRef")],
   [Kind.FieldDef, new vscode.ThemeColor("aya.color.FieldDef")],
+  [Kind.ModuleRef, new vscode.ThemeColor("aya.color.ModuleRef")],
+  [Kind.ModuleDef, new vscode.ThemeColor("aya.color.ModuleDef")],
+  [Kind.GeneralizeRef, new vscode.ThemeColor("aya.color.GeneralizeRef")],
+  [Kind.GeneralizeDef, new vscode.ThemeColor("aya.color.GeneralizeDef")],
 ]);
 
 let highlights: HighlightResponse | null = null;

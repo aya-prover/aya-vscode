@@ -141,8 +141,8 @@
         ],
         "colors": [
             {
-                "id": "aya.color.FnCall",
-                "description": "Color for function calls",
+                "id": "aya.color.FnRef",
+                "description": "Color for function references",
                 "defaults": {
                     "light": "#005DAC",
                     "dark": "#79c0ff"
@@ -157,8 +157,8 @@
                 }
             },
             {
-                "id": "aya.color.PrimCall",
-                "description": "Color for primitive calls",
+                "id": "aya.color.PrimRef",
+                "description": "Color for primitive references",
                 "defaults": {
                     "light": "#005DAC",
                     "dark": "#79c0ff"
@@ -173,8 +173,8 @@
                 }
             },
             {
-                "id": "aya.color.DataCall",
-                "description": "Color for data calls",
+                "id": "aya.color.DataRef",
+                "description": "Color for data references",
                 "defaults": {
                     "light": "#218C21",
                     "dark": "#33d333"
@@ -189,8 +189,8 @@
                 }
             },
             {
-                "id": "aya.color.StructCall",
-                "description": "Color for struct calls",
+                "id": "aya.color.StructRef",
+                "description": "Color for struct references",
                 "defaults": {
                     "light": "#218C21",
                     "dark": "#33d333"
@@ -205,8 +205,8 @@
                 }
             },
             {
-                "id": "aya.color.ConCall",
-                "description": "Color for constructor calls",
+                "id": "aya.color.ConRef",
+                "description": "Color for constructor references",
                 "defaults": {
                     "light": "#A021EF",
                     "dark": "#d2a8ff"
@@ -221,8 +221,8 @@
                 }
             },
             {
-                "id": "aya.color.FieldCall",
-                "description": "Color for field calls",
+                "id": "aya.color.FieldRef",
+                "description": "Color for field references",
                 "defaults": {
                     "light": "#A021EF",
                     "dark": "#d2a8ff"
@@ -234,6 +234,38 @@
                 "defaults": {
                     "light": "#A021EF",
                     "dark": "#d2a8ff"
+                }
+            },
+            {
+                "id": "aya.color.ModuleDef",
+                "description": "Color for module definitions",
+                "defaults": {
+                    "light": "#8b5d5d",
+                    "dark": "#ffbfbf"
+                }
+            },
+            {
+                "id": "aya.color.ModuleRef",
+                "description": "Color for module references",
+                "defaults": {
+                    "light": "#8b5d5d",
+                    "dark": "#ffbfbf"
+                }
+            },
+            {
+                "id": "aya.color.GeneralizeDef",
+                "description": "Color for generalized variable definitions",
+                "defaults": {
+                    "light": "#8b5d5d",
+                    "dark": "#ffbfbf"
+                }
+            },
+            {
+                "id": "aya.color.GeneralizeRef",
+                "description": "Color for generalized variable references",
+                "defaults": {
+                    "light": "#8b5d5d",
+                    "dark": "#ffbfbf"
                 }
             }
         ]
