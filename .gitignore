@@ -1,3 +1,4 @@
+# Config
 out
 dist
 node_modules
@@ -26,7 +27,17 @@ lombok.config
 /test.html
 /highlight-hover.js
 
+# Java
 /cli-*-all.jar
 /tgbot-*-all.jar
 imgui.ini
 /diagram.uml
+
+# Yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
