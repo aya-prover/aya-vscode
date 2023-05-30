@@ -3,6 +3,14 @@ import { LanguageClient } from "vscode-languageclient/node";
 import * as highlight from './highlight';
 import * as compute from './compute-term';
 
+export const AYA_CMD_LOAD: string = "aya.lsp.command.load";
+export const AYA_CMD_COMPUTE_TYPE: string = "aya.lsp.command.compute-type";
+export const AYA_CMD_COMPUTE_NF: string = "aya.lsp.command.compute-nf";
+
+export function recompile() {
+  vscode.commands.executeCommand(AYA_CMD_LOAD);
+}
+
 export function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client: LanguageClient) {
   type ActionHandler = (_: vscode.TextEditor) => void;
 
@@ -20,13 +28,13 @@ export function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client
     (editor) => client.sendRequest<ResultType>(method, paramBuilder(editor)).then(result => resultHandler(editor, result)).catch(console.log)
   );
 
-  context.subscriptions.push(vscode.commands.registerCommand("aya.lsp.command.load", jsonRequest(
+  context.subscriptions.push(vscode.commands.registerCommand(AYA_CMD_LOAD, jsonRequest(
     "aya/load",
     (editor) => editor.document.uri.toString(),
     highlight.applyHighlight,
   )));
 
-  context.subscriptions.push(vscode.commands.registerCommand("aya.lsp.command.compute-type", jsonRequest(
+  context.subscriptions.push(vscode.commands.registerCommand(AYA_CMD_COMPUTE_TYPE, jsonRequest(
     "aya/computeType",
     (editor) => ({
       uri: editor.document.uri.toString(),
@@ -35,7 +43,7 @@ export function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client
     compute.applyComputedTerm,
   )));
 
-  context.subscriptions.push(vscode.commands.registerCommand("aya.lsp.command.compute-nf", jsonRequest(
+  context.subscriptions.push(vscode.commands.registerCommand(AYA_CMD_COMPUTE_NF, jsonRequest(
     "aya/computeNF",
     (editor) => ({
       uri: editor.document.uri.toString(),

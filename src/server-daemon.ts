@@ -39,6 +39,7 @@ export async function startDaemon(context: vscode.ExtensionContext, progress: Pr
 
   progress.report({ message: "Aya started", increment: 1500 });
   features.setupAyaSpecialFeatures(context, languageClient);
+  features.recompile();
 }
 
 async function startMode(outputChannel: vscode.OutputChannel, mode: string, host: string, port: number): Promise<ServerOptions> {
