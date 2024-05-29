@@ -31,7 +31,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(extends|prim|new|module|forall|tighter|import|variable|infix|overlap|inline|Type|Set|Prop|ISet|infixr|infixl|fixl|fixr|def|counterexample|open|private|using|as|coerce|data|Sig|public|Pi|looser|example|struct|hiding|match)\b</string>
+			<string>\b(extends|prim|new|module|forall|tighter|import|variable|infix|overlap|inline|Type|Set|Prop|ISet|infixr|infixl|fixl|fixr|def|open|private|using|as|coerce|data|Sig|public|fn|elim|Fn|looser|example|class|hiding|match)\b</string>
 			<key>name</key>
 			<string>keyword.other.aya</string>
 		</dict>
@@ -43,7 +43,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>,|\\|↑|Σ|λ|Π|∀|→|←|⇒|⦇|⦈|⦃|⦄|⟦|⟧</string>
+			<string>,|\\|↑|Σ|∀|→|←|⇒|⦇|⦈</string>
 			<key>name</key>
 			<string>keyword.other.aya</string>
 		</dict>
