@@ -44,7 +44,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(data|open[[:space:]]+data|struct|extends|new)[[:space:]]+([^:,;\\\(\){}@"[:space:]]+)</string>
+			<string>(data|open[[:space:]]+data|class|extends|new)[[:space:]]+([^:,;\\\(\){}@"[:space:]]+)</string>
 		</dict>
 		<dict>
 			<key>captures</key>
@@ -104,7 +104,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(example|counterexample|looser|tighter|open|Sig|Pi|match|infix|infixl|infixr|fixl|fixr|Type|Set|Prop|ISet|as|public|private|using|hiding|coerce|inline)\b</string>
+			<string>\b(example|looser|tighter|open|Sig|Fn|fn|do|elim|match|infix|infixl|infixr|fixl|fixr|Type|Set|Prop|ISet|as|public|private|using|hiding|coerce|inline)\b</string>
 			<key>name</key>
 			<string>keyword.other.aya</string>
 		</dict>
@@ -116,7 +116,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>,|\\|↑|Σ|λ|Π|∀|→|←|⇒|⦇|⦈|⦃|⦄|⟦|⟧</string>
+			<string>,|\\|↑|Σ|∀|→|←|⇒|⦇|⦈</string>
 			<key>name</key>
 			<string>keyword.other.aya</string>
 		</dict>

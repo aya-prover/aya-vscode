@@ -3,7 +3,7 @@
     "displayName": "Aya Prover",
     "description": "Aya Prover support for VSCode",
     "license": "GPL-3.0",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "publisher": "aya-prover",
     "repository": {
         "url": "https://github.com/aya-prover/aya-vscode"
@@ -12,7 +12,7 @@
         "url": "https://github.com/aya-prover/aya-vscode/issues"
     },
     "engines": {
-        "vscode": "^1.74.9"
+        "vscode": "^1.89.0"
     },
     "categories": [
         "Snippets",
@@ -20,7 +20,6 @@
     ],
     "main": "./out/extension.js",
     "activationEvents": [
-        "onLanguage:aya",
         "workspaceContains:aya.json"
     ],
     "contributes": {
@@ -50,7 +49,7 @@
                 "when": "editorLangId == aya"
             },
             {
-                "command": "aya.lsp.command.compute-nf",
+                "command": "aya.lsp.command.compute-type-nf",
                 "key": "ctrl+l ctrl+n",
                 "mac": "ctrl+l ctrl+n",
                 "when": "editorLangId == aya"
@@ -189,16 +188,16 @@
                 }
             },
             {
-                "id": "aya.color.StructRef",
-                "description": "Color for struct references",
+                "id": "aya.color.ClassRef",
+                "description": "Color for class references",
                 "defaults": {
                     "light": "#218C21",
                     "dark": "#33d333"
                 }
             },
             {
-                "id": "aya.color.StructDef",
-                "description": "Color for struct definitions",
+                "id": "aya.color.ClassDef",
+                "description": "Color for class definitions",
                 "defaults": {
                     "light": "#218C21",
                     "dark": "#33d333"
@@ -279,19 +278,19 @@
         "test": "node ./out/test/runTest.js"
     },
     "devDependencies": {
-        "@types/glob": "^8.0.0",
-        "@types/mocha": "^10.0.1",
-        "@types/node": "^18.11.12",
-        "@types/vscode": "^1.74.0",
-        "@typescript-eslint/eslint-plugin": "^5.46.0",
-        "@typescript-eslint/parser": "^5.46.0",
-        "eslint": "^8.29.0",
-        "glob": "^8.0.3",
-        "mocha": "^10.1.0",
-        "typescript": "^4.9.4",
+        "@types/glob": "^8.1.0",
+        "@types/mocha": "^10.0.6",
+        "@types/node": "^20.12.13",
+        "@types/vscode": "^1.89.0",
+        "@typescript-eslint/eslint-plugin": "^7.11.0",
+        "@typescript-eslint/parser": "^7.11.0",
+        "eslint": "^9.3.0",
+        "glob": "^10.4.1",
+        "mocha": "^10.4.0",
+        "typescript": "^5.4.5",
         "vscode-test": "^1.6.1"
     },
     "dependencies": {
-        "vscode-languageclient": "^8.0.2"
+        "vscode-languageclient": "^9.0.1"
     }
 }

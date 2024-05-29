@@ -5,7 +5,7 @@ import * as compute from './compute-term';
 
 export const AYA_CMD_LOAD: string = "aya.lsp.command.load";
 export const AYA_CMD_COMPUTE_TYPE: string = "aya.lsp.command.compute-type";
-export const AYA_CMD_COMPUTE_NF: string = "aya.lsp.command.compute-nf";
+export const AYA_CMD_COMPUTE_TYPE_NF: string = "aya.lsp.command.compute-type-nf";
 
 export function recompile() {
   vscode.commands.executeCommand(AYA_CMD_LOAD);
@@ -43,8 +43,8 @@ export function setupAyaSpecialFeatures(context: vscode.ExtensionContext, client
     compute.applyComputedTerm,
   )));
 
-  context.subscriptions.push(vscode.commands.registerCommand(AYA_CMD_COMPUTE_NF, jsonRequest(
-    "aya/computeNF",
+  context.subscriptions.push(vscode.commands.registerCommand(AYA_CMD_COMPUTE_TYPE_NF, jsonRequest(
+    "aya/computeTypeNF",
     (editor) => ({
       uri: editor.document.uri.toString(),
       position: editor.selection.active,
