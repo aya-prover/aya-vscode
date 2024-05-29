@@ -12,8 +12,9 @@ export async function findAya(): Promise<string | null> {
   }
 
   let lspLoadPath = config.get<string>("lsp.path");
-  if (lspLoadPath && fs.existsSync(lspLoadPath)) {
-    return lspLoadPath;
+  if (lspLoadPath) {
+    if (fs.existsSync(lspLoadPath)) return lspLoadPath;
+    else await vscode.window.showWarningMessage(`The configured lsp path does not exist: ${lspLoadPath}`);
   }
 
   const sysPath = process.env['PATH'];

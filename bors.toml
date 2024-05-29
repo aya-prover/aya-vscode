@@ -1,3 +1,0 @@
-status = ["build (15.x)"]
-commit_title = "MERGE: ${PR_REFS}"
-delete_merged_branches = true
